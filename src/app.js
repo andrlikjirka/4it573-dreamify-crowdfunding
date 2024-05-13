@@ -1,6 +1,8 @@
 import express from 'express';
 import nunjucks from "nunjucks";
 import cookieParser from "cookie-parser";
+import projectsRoutes from "./routes/projects.routes.js";
+
 
 const app = express();
 
@@ -13,8 +15,12 @@ app.use(cookieParser());
 app.use(express.static('public'));
 
 app.get('/', (req,res) => {
-    res.render('index.html');
-})
+    res.render('homepage/index.html', {
+
+    });
+});
+
+app.use(projectsRoutes);
 
 app.use((req, res, next) => {
     res.status(404);
