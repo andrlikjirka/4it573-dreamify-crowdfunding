@@ -15,7 +15,7 @@ app.use(cookieParser());
 app.use(express.static('public'));
 
 app.get('/', (req,res) => {
-    res.render('homepage/index.html', {
+    res.render('index.html', {
 
     });
 });
