@@ -1,0 +1,24 @@
+version: '3.8'
+name: '4it573-crowdfunding'
+
+services:
+
+
+  mongodb:
+    image: mongo:7.0.9
+    volumes:
+      - db:/data/db
+    ports:
+      - '27017:27017'
+    env_file:
+      - db.env
+    networks:
+      - 'network'
+
+volumes:
+  db:
+    driver: local
+
+networks:
+  network:
+    driver: bridge

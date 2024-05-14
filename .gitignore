@@ -1,5 +1,7 @@
 .idea
 
+.docker/db.env
+
 # Logs
 logs
 *.log
