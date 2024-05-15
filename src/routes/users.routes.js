@@ -70,7 +70,7 @@ router.post('/users/login', async (req, res) => {
 
 router.get('/users/logout', (req, res) => {
    res.clearCookie('jwt');
-   res.redirect('back');
+   res.redirect('/');
 });
 
 export default router;

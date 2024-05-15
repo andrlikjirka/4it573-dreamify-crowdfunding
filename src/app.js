@@ -1,4 +1,4 @@
-import express, {raw} from 'express';
+import express from 'express';
 import nunjucks from "nunjucks";
 import cookieParser from "cookie-parser";
 import {connectDB} from "./db/db.js";
