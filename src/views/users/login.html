@@ -1,0 +1,32 @@
+{% extends "@layout.html" %}
+
+{% block content %}
+<section class="bg-primary bg-gradient py-5">
+    <div class="container px-5 py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8 col-sm-12">
+                <div class="card">
+                    <div class="card-header py-3 px-4 text-primary">Přihlásit</div>
+                    <div class="card-body py-4 px-4">
+                        <form action="/users/login" method="post" autocomplete="off">
+                            <div class="mb-3">
+                                <label for="lb_email" class="form-label small">E-mail</label>
+                                <input type="email" class="form-control" id="lb_email" name="email" required>
+                            </div>
+                            <div class="mb-4">
+                                <label for="lb_password" class="form-label small">Heslo</label>
+                                <input type="password" class="form-control" id="lb_password" name="password" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary mt-1 px-4 py-2">Přihlásit se</button>
+                            <p class="mt-4 small">
+                                Ještě nemáte vytvořený účet?
+                                <a class="text-primary" href="/users/register">Registrovat se</a>
+                            </p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
