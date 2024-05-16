@@ -4,7 +4,8 @@ import {User} from "./user.model.js";
 const dreamSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true
+        required: true,
+        maxLength: 255
     },
     summary: {
         type: String,
@@ -12,12 +13,13 @@ const dreamSchema = new mongoose.Schema({
     },
     // TODO: category???
     description: {
-        type: String,
+        type: String
     },
     goal: {
         type: Number,
         required: true,
-        min: 0
+        min: 1,
+        max: 999999999
     },
     pledged: {
         type: Number,
@@ -26,12 +28,13 @@ const dreamSchema = new mongoose.Schema({
     status: {
         type: String,
         required: true,
-        default: 'waiting',
+        default: 'approved',
         enum: ['waiting', 'approved', 'cancelled', 'successful', 'failed']
     },
     dueDate: {
         type: Date,
-        required: true
+        min: new Date(Date.now()),
+        required: true,
     },
     author: {
         author_id: {
@@ -45,10 +48,14 @@ const dreamSchema = new mongoose.Schema({
         }
     },
     // TODO: photos (array)???
+    showed: {
+        type: Boolean,
+        default: false
+    },
     deleted: {
         type: Boolean,
         default: false
     }
 });
 
-export const Dream = mongoose.model('Project', dreamSchema);
+export const Dream = mongoose.model('Dream', dreamSchema);

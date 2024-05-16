@@ -1,0 +1,54 @@
+{% extends "@layout.html" %}
+
+{% block content %}
+
+<div class="container px-5 py-5">
+    <h3 class="mb-5 text-center">Nový sen</h3>
+
+    <div class="row justify-content-center">
+        <div class="col-8">
+            <form action="/dreams" method="post">
+                <div class="mb-4">
+                    <label for="dream-name" class="form-label">Co je tvým snem?</label>
+                    <input type="text" id="dream-name" class="form-control" placeholder="Název snu" name="dreamName" autofocus required>
+                </div>
+                <!-- TODO: categories
+                 <div class="mb-4">
+                    <label for="dream-category" class="form-label">Do jaké kategorie patří tvůj sen?</label>
+                    <select id="dream-category" class="form-select" aria-label="Category">
+                        <option selected value="">Vyber kategorii</option>
+                        <option value="business">Podnikání</option>
+                        <option value="travelling">Cestování</option>
+                        <option value="">Three</option>
+                    </select>
+                </div>
+                 -->
+                <div class="mb-4">
+                    <label for="dream-summary" class="form-label">Krátce shrň svůj sen</label>
+                    <textarea rows="3" id="dream-summary" class="form-control" name="dreamSummary" placeholder="Shrnutí tvého snu" required></textarea>
+                </div>
+                <div class="mb-4">
+                    <label for="dream-description" class="form-label">Rozepiš se o svém snu</label>
+                    <textarea rows="10" id="dream-description" class="form-control" name="dreamDescription" placeholder="Popis tvého snu" required></textarea>
+                </div>
+                <div class="mb-4">
+                    <label for="dream-goal" class="form-label">Kolik potřebuješ na realizaci svého snu?</label>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Kč</span>
+                        <input type="number" class="form-control" aria-label="Cílová částka" id="dream-goal" name="dreamGoal" min="1" step="1">
+                    </div>
+                </div>
+                <div class="mb-5">
+                    <label for="dream-date" class="form-label">Kdy si chceš splnit svůj sen?</label>
+                    <input type="date" id="dream-date" class="form-control" name="dreamDate" required>
+                </div>
+                <div class="text-center mb-5">
+                    <button type="submit" class="btn btn-primary px-4 py-2 fs-6 ">Začít si plnit svůj sen</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

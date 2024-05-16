@@ -6,13 +6,16 @@ import dreamsRoutes from "./routes/dreams.routes.js";
 import method_override from 'method-override';
 import loadUserMiddleware from "./middlewares/loadUser.middleware.js";
 import usersRoutes from "./routes/users.routes.js";
+import dateFilter from "nunjucks-date-filter";
 
 const app = express();
 
-nunjucks.configure('src/views', {
+var env = nunjucks.configure('src/views', {
     autoescape: true,
     express: app
 });
+env.addFilter('date', dateFilter);
+
 app.use(express.urlencoded({extended: true}));
 app.use(cookieParser());
 app.use(express.static('public'));

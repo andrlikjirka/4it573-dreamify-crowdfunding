@@ -1,0 +1,49 @@
+{% extends "@layout.html" %}
+
+{% block content %}
+
+<div class="container px-5 py-5">
+    <h3 class="mb-5">Prozkoumej sny</h3>
+
+    <div>
+        <!-- TODO: kategorie -->
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 mb-5">
+        {% for dream in dreams %}
+
+        <div class="col">
+            <div class="card">
+                <a href="dreams/{{ dream._id }}">
+                    <img src="https://biggardenfurniture.com.au/wp-content/uploads/2018/08/img-placeholder.png" class="card-img-top w-100 img-fluid ms-auto me-auto" alt="...">
+                </a>
+                <div class="card-body px-4">
+                    <h5 class="card-title mt-1">
+                        <a href="dreams/{{ dream._id }}" class="text-decoration-none link-opacity-75-hover link-dark">{{ dream.name }}</a>
+                    </h5>
+                    <div class="card-text">
+                        <div class="mb-2 small">Autor: <span class="fw-medium">{{ dream.author.author_name }}</span></div>
+                        <div class="mb-2 d-flex flex-row">
+                            <div>Termín splnění: {{ dream.dueDate | date("DD. MM. YYYY") }}</div>
+                        </div>
+                        <p class="mb-2">{{ dream.summary }}</p>
+                        <div>Vybráno
+                            <div class="">
+                                <span class="fs-5 fw-medium">{{ dream.pledged }} Kč</span>
+                                <span> z </span>
+                                <span>{{ dream.goal }} Kč</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endblock %}
