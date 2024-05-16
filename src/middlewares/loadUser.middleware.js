@@ -7,8 +7,8 @@ export default async (req, res, next) => {
         res.locals.user = null;
         return next();
     }
-    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
     try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
         const user = await User.findOne({_id: decoded.userId}, {}, {});
         if (!user) return next();
         res.locals.user = {
@@ -17,6 +17,10 @@ export default async (req, res, next) => {
             role: user.role
         };
     } catch (err) {
+        if (err instanceof jwt.TokenExpiredError) {
+            res.locals.user = null; // if token cannot be decoded, logout user
+            return next();
+        }
         console.error(err.message);
         return next(err);
     }
