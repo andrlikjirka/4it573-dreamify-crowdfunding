@@ -40,10 +40,9 @@ router.get('/dreams/:id', async (req, res) => {
         {_id: req.params.id},
         {},
         {});
-    dream.dateDiff = 'a';
-       res.render('dreams/dreams.detail.html', {
+    res.render('dreams/dreams.detail.html', {
         dream: dream
-   });
+    });
 });
 
 router.get('/new-dream', (req, res) => {

@@ -24,12 +24,16 @@
                     <div class="card-text">
                         <div class="mb-2 small">Autor: <span class="fw-medium">{{ dream.author.author_name }}</span></div>
                         <div class="mb-2 d-flex flex-row">
-                            <div>Termín splnění: {{ dream.dueDate | date("DD. MM. YYYY") }}</div>
+                            <div>
+                                <span>Zbývá: </span>
+                                <span>{{ dream.dateDiff }}</span>
+                                <span>dnů</span>
+                            </div>
                         </div>
                         <p class="mb-2">{{ dream.summary }}</p>
                         <div>Vybráno
-                            <div class="">
-                                <span class="fs-5 fw-medium">{{ dream.pledged }} Kč</span>
+                            <div class="fw-medium">
+                                <span class="fs-5   ">{{ dream.pledged }} Kč</span>
                                 <span> z </span>
                                 <span>{{ dream.goal }} Kč</span>
                             </div>

@@ -38,17 +38,28 @@
         <div class="col-12 col-md-6">
             <div class="mb-3">
                 <div class="">Vybráno</div>
-                <div class="fw-bolder fs-3">{{ dream.pledged }} Kč</div>
-                <div class="fw-medium">z {{ dream.goal }} Kč</div>
+                <div class="fw-bolder fs-3">
+                    <span>{{ dream.pledged }}</span>
+                    <span>Kč</span>
+                </div>
+                <div class="fw-medium">
+                    <span>z</span>
+                    <span>{{ dream.goal }}</span>
+                    <span>Kč</span>
+                </div>
             </div>
             <div class="mb-3">
                 <div class="">Přispělo</div>
-                <div class="fw-medium fs-4">X lidí</div>
+                <div class="fw-medium fs-4">
+                    <span>X</span>
+                    <span>lidí</span>
+                </div>
             </div>
             <div class="mb-4">
-                <div>Termín splnění</div>
+                <div>Zbývá</div>
                 <div class="fw-medium fw-medium fs-4">
-                    {{ dream.dueDate | date("DD. MM. YYYY") }}
+                    <span>{{ dream.dateDiff }}</span>
+                    <span>dnů</span>
                 </div>
             </div>
 

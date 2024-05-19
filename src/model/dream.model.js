@@ -58,4 +58,9 @@ const dreamSchema = new mongoose.Schema({
     }
 });
 
+dreamSchema.virtual('dateDiff').get(function() {
+    const currentDate = new Date();
+    return Math.ceil((this.dueDate - currentDate) / (1000 * 60 * 60 * 24));
+});
+
 export const Dream = mongoose.model('Dream', dreamSchema);
