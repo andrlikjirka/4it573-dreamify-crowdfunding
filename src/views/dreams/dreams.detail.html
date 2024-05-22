@@ -33,7 +33,26 @@
 
     <div class="row g-3 mb-5">
         <div class="col-12 col-md-6">
-            <img src="https://biggardenfurniture.com.au/wp-content/uploads/2018/08/img-placeholder.png" class="d-block" alt="..." style="max-width: 500px; max-height: 500px">
+            <div id="carouselExample" class="carousel carousel-dark slide">
+                <div class="carousel-inner">
+                    {% for photo in dream.photos %}
+                    <div class="carousel-item {% if loop.first%} active {%endif%}">
+                        <div class="d-flex justify-content-center img-fluid">
+                            <img src="/uploads/dreams/{{ photo.name }}" class="d-block" alt="..." style="max-width: 500px; max-height: 500px">
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
         </div>
         <div class="col-12 col-md-6">
             <div class="mb-3">

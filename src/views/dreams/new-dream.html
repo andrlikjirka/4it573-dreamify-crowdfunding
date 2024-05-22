@@ -7,7 +7,7 @@
 
     <div class="row justify-content-center">
         <div class="col-8">
-            <form action="/dreams" method="post">
+            <form action="/dreams" method="post" enctype="multipart/form-data">
                 <div class="mb-4">
                     <label for="dream-name" class="form-label">Co je tvým snem?</label>
                     <input type="text" id="dream-name" class="form-control" placeholder="Název snu" name="dreamName" autofocus required>
@@ -38,12 +38,16 @@
                         <input type="number" class="form-control" aria-label="Cílová částka" id="dream-goal" name="dreamGoal" min="1" step="1">
                     </div>
                 </div>
-                <div class="mb-5">
+                <div class="mb-4">
                     <label for="dream-date" class="form-label">Kdy si chceš splnit svůj sen?</label>
                     <input type="date" id="dream-date" class="form-control" name="dreamDate" required>
                 </div>
+                <div class="mb-5">
+                    <label for="formFile" class="form-label">Obrázek tvého snu</label>
+                    <input class="form-control" type="file" id="formFile" name="file" accept="image/png, image/jpeg" required>
+                </div>
                 <div class="text-center mb-5">
-                    <button type="submit" class="btn btn-primary px-4 py-2 fs-6 ">Začít si plnit svůj sen</button>
+                    <button type="submit" class="btn btn-primary btn-lg px-5 py-2 ">Splň si svůj sen</button>
                 </div>
             </form>
         </div>

@@ -1,0 +1,100 @@
+{% extends "@layout.html" %}
+
+{% block content %}
+
+<div class="container px-5 py-5">
+    <div class="row mb-4">
+        <div class="col-12">
+            <a href="/my-dreams" class="text-dark text-decoration-none">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                     class="bi bi-arrow-left me-2" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                          d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+                </svg>
+                Zpět na seznam mých snů
+            </a>
+        </div>
+    </div>
+
+    <h3 class="mb-5 text-center">Úprava snu</h3>
+
+    <div class="row justify-content-center">
+        <div class="col-8">
+            <form action="/my-dreams/{{ dream._id }}?_method=PUT" method="post">
+                <div class="mb-4">
+                    <label for="dream-name" class="form-label">Co je tvým snem?</label>
+                    <input type="text" id="dream-name" class="form-control" placeholder="Název snu" name="dreamName"
+                           value="{{ dream.name }}" required>
+                </div>
+                <!-- TODO: categories
+                 <div class="mb-4">
+                    <label for="dream-category" class="form-label">Do jaké kategorie patří tvůj sen?</label>
+                    <select id="dream-category" class="form-select" aria-label="Category">
+                        <option selected value="">Vyber kategorii</option>
+                        <option value="business">Podnikání</option>
+                        <option value="travelling">Cestování</option>
+                        <option value="">Three</option>
+                    </select>
+                </div>
+                 -->
+                <div class="mb-4">
+                    <label for="dream-summary" class="form-label">Krátce shrň svůj sen</label>
+                    <textarea rows="3" id="dream-summary" class="form-control" name="dreamSummary" placeholder="Shrnutí tvého snu" required>{{ dream.summary }}</textarea>
+                </div>
+                <div class="mb-4">
+                    <label for="dream-description" class="form-label">Rozepiš se o svém snu</label>
+                    <textarea rows="10" id="dream-description" class="form-control" name="dreamDescription" placeholder="Popis tvého snu" required>{{ dream.description }}</textarea>
+                </div>
+                <div class="mb-4">
+                    <label for="dream-goal" class="form-label">Kolik potřebuješ na realizaci svého snu?</label>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Kč</span>
+                        <input type="number" class="form-control" aria-label="Cílová částka" id="dream-goal"
+                               name="dreamGoal" min="1" step="1" value="{{ dream.goal }}">
+                    </div>
+                </div>
+                <div class="mb-5">
+                    <label for="dream-date" class="form-label">Kdy si chceš splnit svůj sen?</label>
+                    <input type="date" id="dream-date" class="form-control" name="dreamDate" required value="{{ dream.dueDate | date('YYYY-MM-DD') }}">
+                </div>
+                <div class="text-center mb-5">
+                    <button type="submit" class="btn btn-primary btn-lg px-5 py-2 ">Uložit změny</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <h4 class="mb-3 text-center">Obrázky</h4>
+
+    <div class="row justify-content-center">
+        <div class="col-8">
+            <form action="/my-dreams/{{ dream._id }}/photos" method="post" enctype="multipart/form-data">
+                <label for="formFile" class="form-label">Obrázky tvého snu</label>
+                <div class="d-flex flex-row">
+                    <input class="form-control me-3" type="file" id="formFile" name="file" accept="image/png, image/jpeg">
+                    <button type="submit" class="btn btn-primary px-4">Nahrát</button>
+                </div>
+            </form>
+
+            <ul class="mt-4 list-unstyled">
+                {% for photo in dream.photos %}
+                <li>
+                    <div class="d-flex flex-row align-items-center mb-3">
+                        <img src="/uploads/dreams/{{ photo.name }}" class="card-img-top img-fluid me-3" alt="..." style="width: 75px">
+                        <span> {{ photo.name }}</span>
+                        <form action="/my-dreams/{{ dream._id }}/photos/{{ photo._id }}?_method=DELETE" method="post">
+                            <button type="submit" class="btn btn-sm btn-outline-danger small ms-2 py-0">Odebrat</button>
+                        </form>
+                    </div>
+                    <hr>
+                </li>
+                {% endfor %}
+            </ul>
+
+        </div>
+    </div>
+
+
+</div>
+
+{% endblock %}

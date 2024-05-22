@@ -7,10 +7,15 @@ import method_override from 'method-override';
 import loadUserMiddleware from "./middlewares/loadUser.middleware.js";
 import usersRoutes from "./routes/users.routes.js";
 import dateFilter from "nunjucks-date-filter";
+import mongoose from "mongoose";
+import {translateDreamStatus} from "./utils.js";
 
 const app = express();
 
-var env = nunjucks.configure('src/views', {
+// utils
+app.locals.translateDreamStatus = translateDreamStatus;
+
+let env = nunjucks.configure('src/views', {
     autoescape: true,
     express: app
 });
@@ -28,6 +33,8 @@ app.use(loadUserMiddleware);
 app.get('/', async (req,res) => {
     res.render('index.html', {});
 });
+
+mongoose.set('debug', true);
 
 app.use(usersRoutes);
 app.use(dreamsRoutes);

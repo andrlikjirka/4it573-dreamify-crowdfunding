@@ -28,12 +28,11 @@ const dreamSchema = new mongoose.Schema({
     status: {
         type: String,
         required: true,
-        default: 'approved',
+        default: 'waiting',
         enum: ['waiting', 'approved', 'cancelled', 'successful', 'failed']
     },
     dueDate: {
         type: Date,
-        min: new Date(Date.now()),
         required: true,
     },
     author: {
@@ -47,7 +46,13 @@ const dreamSchema = new mongoose.Schema({
             required: true
         }
     },
-    // TODO: photos (array)???
+    photos: [
+        {
+            name: {
+                type: String
+            },
+        }
+    ],
     showed: {
         type: Boolean,
         default: false

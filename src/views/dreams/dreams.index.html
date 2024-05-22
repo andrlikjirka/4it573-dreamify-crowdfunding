@@ -14,8 +14,9 @@
 
         <div class="col">
             <div class="card">
-                <a href="dreams/{{ dream._id }}">
-                    <img src="https://biggardenfurniture.com.au/wp-content/uploads/2018/08/img-placeholder.png" class="card-img-top w-100 img-fluid ms-auto me-auto" alt="...">
+                <a href="/dreams/{{ dream._id }}">
+                    <img src="/uploads/dreams/{{ dream.photos[0].name }}" class="card-img-top w-100 img-fluid ms-auto me-auto" alt="..."
+                         style="height: 250px; width: auto; object-fit: cover">
                 </a>
                 <div class="card-body px-4">
                     <h5 class="card-title mt-1">

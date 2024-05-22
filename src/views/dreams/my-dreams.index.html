@@ -1,0 +1,74 @@
+{% extends "@layout.html" %}
+
+{% block content %}
+
+<div class="container px-5 py-5">
+    <h3 class="mb-4">Moje sny</h3>
+
+    <a href="/new-dream" class="btn btn-primary px-4 py-2 mb-4">Nový sen</a>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 mb-5">
+        {% for dream in dreams %}
+
+        <div class="col">
+            <div class="card">
+                <a href="/my-dreams/{{ dream._id }}">
+                    <img src="/uploads/dreams/{{ dream.photos[0].name }}" class="card-img-top w-100 img-fluid ms-auto me-auto" alt="..."
+                         style="height: 250px; width: auto; object-fit: cover">
+                </a>
+                <div class="card-body px-4">
+                    <h5 class="card-title mt-1">
+                        <a href="/my-dreams/{{ dream._id }}" class="text-decoration-none link-opacity-75-hover link-dark">{{ dream.name }}</a>
+                    </h5>
+                    <div class="card-text">
+                        <div class="mb-1">
+                            <span> Stav: </span>
+                            <span class="badge rounded-pill
+                            {% if dream.status == 'waiting'%} bg-warning text-dark
+                            {% elif dream.status == 'approved' %} bg-success
+                            {% elif dream.status == 'cancelled' %} bg-secondary
+                            {% elif dream.status == 'successful' %} bg-success
+                            {% elif dream.status == 'successful' %} bg-danger
+                            {% endif %}">
+                            {{ translateDreamStatus(dream.status) }}
+                            </span>
+                        </div>
+                        <div class="mb-3">
+                            Datum splnění:
+                            <span>{{ dream.dueDate | date("DD.MM.YYYY") }}</span>
+                        </div>
+                        <div>Vybráno
+                            <div class="fw-medium">
+                                <span class="fs-5">{{ dream.pledged }} Kč</span>
+                                <span> z </span>
+                                <span>{{ dream.goal }} Kč</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer py-2 px-4 d-flex flex-row">
+                    <form action="/my-dreams/{{ dream._id }}?_method=PUT" method="post" class="me-2">
+                        <input type="hidden" name="showed" value="{{ dream.showed }}">
+                        <button type="submit" class="btn btn-sm btn-secondary">
+                            {% if dream.showed %}
+                            Zobrazený
+                            {% else %}
+                            Skrytý
+                            {% endif %}
+                        </button>
+                    </form>
+
+                    <form action="/my-dreams/{{ dream._id }}?_method=DELETE" method="post" class="d-inline-block">
+                        <button type="submit" class="btn btn-sm btn-danger px-3">Smazat</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+
+
+</div>
+
+{% endblock %}
