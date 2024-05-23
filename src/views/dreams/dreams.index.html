@@ -5,7 +5,7 @@
 <div class="container px-5 py-5">
     <h3 class="mb-4">Prozkoumej sny</h3>
 
-    <div class="mb-5">
+    <div class="mb-4">
         <ul class="list-unstyled d-flex flex-wrap justify-content-evenly">
             <li class="px-2 py-2">
                 <a href="/dreams" class="text-decoration-none"> Všechny</a>
@@ -61,9 +61,8 @@
         {% endfor %}
     </div>
     {% else %}
-    <div class="alert alert-primary alert-dismissible fade show py-2 mb-5" role="alert">
+    <div class="alert alert-primary fade show py-2 mb-5" role="alert">
         <span class="small">K dispozici nejsou žádné sny</span>
-        <button type="button" class="btn-close pb-2" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     {% endif %}
 
