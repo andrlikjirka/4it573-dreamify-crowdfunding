@@ -2,13 +2,15 @@ import express from 'express';
 import nunjucks from "nunjucks";
 import cookieParser from "cookie-parser";
 import {connectDB} from "./db/db.js";
-import dreamsRoutes from "./routes/dreams.routes.js";
+import dreamsRoutes from "./routes/public/dreams.routes.js";
 import method_override from 'method-override';
 import loadUserMiddleware from "./middlewares/loadUser.middleware.js";
-import usersRoutes from "./routes/users.routes.js";
+import usersRoutes from "./routes/public/users.routes.js";
 import dateFilter from "nunjucks-date-filter";
 import mongoose from "mongoose";
 import {categories, dreamStatus} from "./utils.js";
+import authMiddleware from "./middlewares/auth.middleware.js";
+import adminMiddleware from "./middlewares/admin.middleware.js";
 
 const app = express();
 
@@ -28,17 +30,26 @@ app.use(express.static('public'));
 app.use(method_override('_method'));
 
 await connectDB();
+mongoose.set('debug', true);
 
 app.use(loadUserMiddleware);
 
+// public module
 app.get('/', async (req,res) => {
     res.render('public/index.html', {});
 });
 
-mongoose.set('debug', true);
-
 app.use(usersRoutes);
 app.use(dreamsRoutes);
+// end: public module
+
+// admin module
+app.get('/admin', authMiddleware, adminMiddleware, async (req,res) => {
+    res.render('admin/index.html', {});
+});
+
+
+// end: admin module
 
 app.use((req, res, next) => {
     res.status(404);

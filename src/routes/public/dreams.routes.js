@@ -1,9 +1,9 @@
 import express from "express";
-import authMiddleware from "../middlewares/auth.middleware.js";
-import {Dream} from "../model/dream.model.js";
-import fileUploadMiddleware from "../middlewares/fileUpload.middleware.js";
+import authMiddleware from "../../middlewares/auth.middleware.js";
+import {Dream} from "../../model/dream.model.js";
+import fileUploadMiddleware from "../../middlewares/fileUpload.middleware.js";
 import * as fs from "fs";
-import {findShowedAcceptedDreams, findShowedAcceptedDreamsByCategory} from "../services/dreams.service.js";
+import {findShowedAcceptedDreams, findShowedAcceptedDreamsByCategory} from "../../services/dreams.service.js";
 
 const router = express.Router();
 
