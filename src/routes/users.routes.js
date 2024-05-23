@@ -1,7 +1,8 @@
-import express, {raw} from "express";
+import express from "express";
 import {User} from "../model/user.model.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import authMiddleware from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
 
@@ -70,6 +71,37 @@ router.post('/login', async (req, res) => {
 router.get('/logout', (req, res) => {
    res.clearCookie('jwt');
    res.redirect('/');
+});
+
+router.get('/profile', authMiddleware, async (req, res, next) => {
+   const user = await User.findOne({_id: res.locals.user.id},{},{});
+   if (!user) return next();
+
+   res.render('users/profile.index.html', {
+      user:  user
+   });
+});
+
+router.put('/profile', authMiddleware, async (req, res, next) => {
+   let user = await User.findOne({_id: res.locals.user.id},{},{});
+
+   if (req.body.name) user.name = req.body.name;
+   if (req.body.email) user.email = req.body.email;
+   if (req.body.password && req.body.password_confirm && (req.body.password === req.body.password_confirm)) {
+      console.log(req.body.password)
+      user.hash = await bcrypt.hash(req.body.password, 10);
+      res.clearCookie('jwt');
+   }
+
+   try {
+      await user.save();
+      console.log(`Successfully updated user info: ${user._id}`);
+   } catch (err) {
+      console.error(err.message);
+      return res.redirect('back');
+   }
+
+   res.redirect('back');
 });
 
 export default router;

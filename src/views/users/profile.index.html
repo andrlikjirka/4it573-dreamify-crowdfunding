@@ -1,0 +1,57 @@
+{% extends "@layout.html" %}
+
+{% block content %}
+
+<div class="container px-5 py-5">
+
+    <h3 class="mb-5 text-center">Můj profil</h3>
+
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8">
+
+            <form action="/profile?_method=PUT" method="post" autocomplete="off">
+                <!-- Jméno, Uživatelské jméno -->
+                <div class="row align-items-center">
+                    <div class="col-lg-6 col-md-6">
+                        <div class="mb-3">
+                            <label for="lb_fname" class="form-label small">Jméno</label>
+                            <input type="text" class="form-control" id="lb_fname" name="name" value="{{ user.name }}" required>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                        <div class="mb-3">
+                            <label for="lb_email" class="form-label small">
+                                E-mail
+                            </label>
+                            <input type="email" class="form-control" id="lb_email" name="email" value="{{ user.email }}" required>
+                        </div>
+                    </div>
+                </div>
+                <!-- Heslo, potvrzení hesla -->
+                <div class="row justify-content-center">
+                    <div class="col-lg-6 col-md-6">
+                        <div class="mb-3">
+                            <label for="lb_password" class="form-label small">
+                                Nové heslo
+                            </label>
+                            <input type="password" class="form-control" id="lb_password" name="password">
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                        <div class="mb-4">
+                            <label for="lb_confirm_password" class="form-label small">Potvrzení hesla</label>
+                            <input type="password" class="form-control" id="lb_confirm_password" name="password_confirm">
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mb-5">
+                    <button type="submit" class="btn btn-primary mt-1 px-4">Uložit změny</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+</div>
+
+{% endblock %}
