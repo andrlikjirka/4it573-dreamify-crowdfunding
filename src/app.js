@@ -32,7 +32,7 @@ await connectDB();
 app.use(loadUserMiddleware);
 
 app.get('/', async (req,res) => {
-    res.render('index.html', {});
+    res.render('public/index.html', {});
 });
 
 mongoose.set('debug', true);

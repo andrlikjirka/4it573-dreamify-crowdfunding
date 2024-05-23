@@ -7,7 +7,7 @@ import authMiddleware from "../middlewares/auth.middleware.js";
 const router = express.Router();
 
 router.get('/register', (req, res) => {
-   res.render('users/register.html', {});
+   res.render('public/users/register.html', {});
 });
 
 router.post('/register', async (req, res) => {
@@ -39,7 +39,7 @@ router.post('/register', async (req, res) => {
 });
 
 router.get('/login', (req, res) => {
-   res.render('users/login.html', {});
+   res.render('public/users/login.html', {});
 });
 
 router.post('/login', async (req, res) => {
@@ -77,7 +77,7 @@ router.get('/profile', authMiddleware, async (req, res, next) => {
    const user = await User.findOne({_id: res.locals.user.id},{},{});
    if (!user) return next();
 
-   res.render('users/profile.index.html', {
+   res.render('public/users/profile.index.html', {
       user:  user
    });
 });
