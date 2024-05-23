@@ -1,12 +1,8 @@
 import express, {raw} from "express";
 import authMiddleware from "../middlewares/auth.middleware.js";
 import {Dream} from "../model/dream.model.js";
-import mongoose from "mongoose";
-import dateFilter from "nunjucks-date-filter";
-import {categories, translateDreamStatus} from "../utils.js";
 import fileUploadMiddleware from "../middlewares/fileUpload.middleware.js";
 import * as fs from "fs";
-import * as path from "path";
 import {findShowedAcceptedDreams, findShowedAcceptedDreamsByCategory} from "../services/dreams.service.js";
 
 const router = express.Router();
