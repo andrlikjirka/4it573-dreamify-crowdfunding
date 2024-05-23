@@ -91,6 +91,9 @@ router.put('/profile', authMiddleware, async (req, res, next) => {
       console.log(req.body.password)
       user.hash = await bcrypt.hash(req.body.password, 10);
       res.clearCookie('jwt');
+   } else {
+      console.log('New passwords does not correspond to password confirmation. Update failed.')
+      return res.redirect('back');
    }
 
    try {
