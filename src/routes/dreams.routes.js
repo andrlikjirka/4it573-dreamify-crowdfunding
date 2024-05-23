@@ -157,14 +157,17 @@ router.delete('/my-dreams/:id/photos/:photoId', async (req, res, next) => {
 
     let photo = dream.photos.id(req.params.photoId);
     if (!photo) return next(); // If no photo is found, pass to the next middleware
+    dream.photos.pull(photo);
 
     const filePath = 'public/uploads/dreams/' + photo.name;
     try {
+        /*
         await Dream.updateOne({_id: req.params.id}, {
             $pull: {
                 photos: {_id: req.params.photoId}
             },
-        });
+        });*/
+        await dream.save();
         fs.unlink(filePath, (err) => {
             if (err) {
                 console.error(`Failed to delete file: ${err.message}`);

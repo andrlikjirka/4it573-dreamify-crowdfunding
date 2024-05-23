@@ -46,13 +46,22 @@ const dreamSchema = new mongoose.Schema({
             required: true
         }
     },
-    photos: [
-        {
-            name: {
-                type: String
+    photos: {
+        type: [
+            {
+                name: {
+                    type: String,
+                    required: true
+                }
+            }
+        ],
+        validate: {
+            validator: function(array) {
+                return array.length >= 1; // Minimum array length of 1
             },
+            message: props => `Array of dream photos must have at least 1 element.`
         }
-    ],
+    },
     showed: {
         type: Boolean,
         default: false
