@@ -3,15 +3,24 @@
 {% block content %}
 
 <div class="container px-5 py-5">
-    <h3 class="mb-5">Prozkoumej sny</h3>
+    <h3 class="mb-4">Prozkoumej sny</h3>
 
-    <div>
-        <!-- TODO: kategorie -->
+    <div class="mb-5">
+        <ul class="list-unstyled d-flex flex-wrap justify-content-evenly">
+            <li class="px-2 py-2">
+                <a href="/dreams" class="text-decoration-none"> Všechny</a>
+            </li>
+            {% for categoryKey,categoryName in categories %}
+            <li class="px-2 py-2">
+                <a href="/dreams?category={{ categoryKey }}" class="text-decoration-none">{{ categoryName }}</a>
+            </li>
+            {% endfor %}
+        </ul>
     </div>
 
+    {% if dreams.length > 0 %}
     <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 mb-5">
         {% for dream in dreams %}
-
         <div class="col">
             <div class="card">
                 {% if dream.photos.length > 0 %}
@@ -25,7 +34,10 @@
                         <a href="dreams/{{ dream._id }}" class="text-decoration-none link-opacity-75-hover link-dark">{{ dream.name }}</a>
                     </h5>
                     <div class="card-text">
-                        <div class="mb-2 small">Autor: <span class="fw-medium">{{ dream.author.author_name }}</span></div>
+                        <div class="d-flex flex-row justify-content-between mb-2">
+                            <div class="small">Autor: <span class="fw-medium">{{ dream.author.author_name }}</span></div>
+                            <div><span class="badge text-bg-primary">{{ categories.get(dream.category) }}</span></div>
+                        </div>
                         <div class="mb-2 d-flex flex-row">
                             <div>
                                 <span>Zbývá: </span>
@@ -46,10 +58,14 @@
                 </div>
             </div>
         </div>
-
         {% endfor %}
-
     </div>
+    {% else %}
+    <div class="alert alert-primary alert-dismissible fade show py-2 mb-5" role="alert">
+        <span class="small">K dispozici nejsou žádné sny</span>
+        <button type="button" class="btn-close pb-2" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %}
 
 </div>
 

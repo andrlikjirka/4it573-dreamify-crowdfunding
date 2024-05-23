@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import {User} from "./user.model.js";
+import {categories} from "../utils.js";
 
 const dreamSchema = new mongoose.Schema({
     name: {
@@ -11,7 +12,11 @@ const dreamSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    // TODO: category???
+    category: {
+        type: String,
+        required: true,
+        enum: Array.from(categories.keys())
+    },
     description: {
         type: String
     },

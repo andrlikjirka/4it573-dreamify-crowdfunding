@@ -14,3 +14,15 @@ export const translateDreamStatus = (dreamStatus) => {
             return 'neznámá';
     }
 };
+
+export const categories = new Map([
+  ['business', 'Podnikání'],
+  ['travelling', 'Cestování'],
+  ['school', 'Vzdělávání'],
+  ['nature', 'Příroda a ekologie'],
+  ['art', 'Umění'],
+  ['music', 'Hudba'],
+  ['movies', 'Film'],
+  ['sport', 'Sport'],
+  ['other', 'Ostatní'],
+]);

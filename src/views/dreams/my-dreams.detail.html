@@ -26,17 +26,17 @@
                     <input type="text" id="dream-name" class="form-control" placeholder="Název snu" name="dreamName"
                            value="{{ dream.name }}" required>
                 </div>
-                <!-- TODO: categories
-                 <div class="mb-4">
+                <div class="mb-4">
                     <label for="dream-category" class="form-label">Do jaké kategorie patří tvůj sen?</label>
-                    <select id="dream-category" class="form-select" aria-label="Category">
-                        <option selected value="">Vyber kategorii</option>
-                        <option value="business">Podnikání</option>
-                        <option value="travelling">Cestování</option>
-                        <option value="">Three</option>
+                    <select id="dream-category" class="form-select" aria-label="Category" name="dreamCategory" required>
+                        <option value="">Vyber kategorii</option>
+                        {% for categoryKey, categoryName in categories %}
+                        <option value="{{ categoryKey }}" {% if dream.category == categoryKey %} selected {% endif %}>
+                            {{ categoryName }}
+                        </option>
+                        {% endfor %}
                     </select>
                 </div>
-                 -->
                 <div class="mb-4">
                     <label for="dream-summary" class="form-label">Krátce shrň svůj sen</label>
                     <textarea rows="3" id="dream-summary" class="form-control" name="dreamSummary" placeholder="Shrnutí tvého snu" required>{{ dream.summary }}</textarea>

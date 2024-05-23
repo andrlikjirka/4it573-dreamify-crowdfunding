@@ -12,17 +12,15 @@
                     <label for="dream-name" class="form-label">Co je tvým snem?</label>
                     <input type="text" id="dream-name" class="form-control" placeholder="Název snu" name="dreamName" autofocus required>
                 </div>
-                <!-- TODO: categories
                  <div class="mb-4">
                     <label for="dream-category" class="form-label">Do jaké kategorie patří tvůj sen?</label>
-                    <select id="dream-category" class="form-select" aria-label="Category">
+                    <select id="dream-category" class="form-select" aria-label="Category" name="dreamCategory" required>
                         <option selected value="">Vyber kategorii</option>
-                        <option value="business">Podnikání</option>
-                        <option value="travelling">Cestování</option>
-                        <option value="">Three</option>
+                        {% for categoryKey, categoryName in categories %}
+                        <option value="{{ categoryKey }}">{{ categoryName }}</option>
+                        {% endfor %}
                     </select>
                 </div>
-                 -->
                 <div class="mb-4">
                     <label for="dream-summary" class="form-label">Krátce shrň svůj sen</label>
                     <textarea rows="3" id="dream-summary" class="form-control" name="dreamSummary" placeholder="Shrnutí tvého snu" required></textarea>

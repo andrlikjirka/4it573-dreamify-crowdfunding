@@ -23,6 +23,9 @@
                         <a href="/my-dreams/{{ dream._id }}" class="text-decoration-none link-opacity-75-hover link-dark">{{ dream.name }}</a>
                     </h5>
                     <div class="card-text">
+                        <div class="mb-2">
+                            <span class="badge text-bg-primary">{{ categories.get(dream.category) }}</span>
+                        </div>
                         <div class="mb-1">
                             <span> Stav: </span>
                             <span class="badge rounded-pill

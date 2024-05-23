@@ -3,18 +3,22 @@ import authMiddleware from "../middlewares/auth.middleware.js";
 import {Dream} from "../model/dream.model.js";
 import mongoose from "mongoose";
 import dateFilter from "nunjucks-date-filter";
-import {translateDreamStatus} from "../utils.js";
+import {categories, translateDreamStatus} from "../utils.js";
 import fileUploadMiddleware from "../middlewares/fileUpload.middleware.js";
 import * as fs from "fs";
 import * as path from "path";
+import {findShowedAcceptedDreams, findShowedAcceptedDreamsByCategory} from "../services/dreams.service.js";
 
 const router = express.Router();
 
 router.get('/dreams', async (req, res) => {
-    const dreams = await Dream.find(
-        {status: 'approved', showed: true, deleted: false},
-        {},
-        {});
+    let dreams;
+    if (req.query.category) {
+        dreams = await findShowedAcceptedDreamsByCategory(req.query.category);
+    } else {
+        dreams = await findShowedAcceptedDreams();
+    }
+
     res.render('dreams/dreams.index.html', {
         dreams: dreams
     });
@@ -25,6 +29,7 @@ router.post('/dreams', authMiddleware, fileUploadMiddleware.single('file'), asyn
     const dream = new Dream({
         name: req.body.dreamName,
         summary: req.body.dreamSummary,
+        category: req.body.dreamCategory,
         description: req.body.dreamDescription,
         goal: req.body.dreamGoal,
         dueDate: req.body.dreamDate,
@@ -94,6 +99,7 @@ router.put('/my-dreams/:id', authMiddleware, async (req, res, next) => {
 
     if (req.body.dreamName) dream.name = req.body.dreamName;
     if (req.body.dreamSummary) dream.summary = req.body.dreamSummary;
+    if (req.body.dreamCategory) dream.category = req.body.dreamCategory;
     if (req.body.dreamDescription) dream.description = req.body.dreamDescription;
     if (req.body.dreamGoal) dream.goal = req.body.dreamGoal;
     if (req.body.dreamDate) dream.dueDate = req.body.dreamDate;
