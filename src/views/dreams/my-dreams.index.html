@@ -35,7 +35,7 @@
                             {% elif dream.status == 'successful' %} bg-success
                             {% elif dream.status == 'successful' %} bg-danger
                             {% endif %}">
-                            {{ translateDreamStatus(dream.status) }}
+                            {{ dreamStatus.get(dream.status) }}
                             </span>
                         </div>
                         <div class="mb-3">

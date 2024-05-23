@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import {User} from "./user.model.js";
-import {categories} from "../utils.js";
+import {categories, dreamStatus} from "../utils.js";
 
 const dreamSchema = new mongoose.Schema({
     name: {
@@ -34,7 +34,7 @@ const dreamSchema = new mongoose.Schema({
         type: String,
         required: true,
         default: 'waiting',
-        enum: ['waiting', 'approved', 'cancelled', 'successful', 'failed']
+        enum: Array.from(dreamStatus.keys())
     },
     dueDate: {
         type: Date,

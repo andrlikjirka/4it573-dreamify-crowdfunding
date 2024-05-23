@@ -1,19 +1,15 @@
-export const translateDreamStatus = (dreamStatus) => {
-    switch (dreamStatus) {
-        case 'waiting':
-            return 'Čeká na schválení';
-        case 'approved':
-            return 'Schválený';
-        case 'cancelled':
-            return 'Zamítnutý';
-        case 'successful':
-            return 'Úspěšný';
-        case 'failed':
-            return 'Neúspěšný';
-        default:
-            return 'neznámá';
-    }
-};
+export const userRoles = new Map([
+   ['admin', 'Administrátor'],
+   ['user', 'Uživatel']
+]);
+
+export const dreamStatus = new Map([
+    ['waiting', 'Čeká na schválení'],
+    ['approved', 'Schválený'],
+    ['cancelled', 'Zamítnutý'],
+    ['successful', 'Úspěšný'],
+    ['failed', 'Neúspěšný'],
+]);
 
 export const categories = new Map([
   ['business', 'Podnikání'],
@@ -26,3 +22,4 @@ export const categories = new Map([
   ['sport', 'Sport'],
   ['other', 'Ostatní'],
 ]);
+
