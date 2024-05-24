@@ -11,6 +11,8 @@ import mongoose from "mongoose";
 import {categories, dreamStatus} from "./utils.js";
 import authMiddleware from "./middlewares/auth.middleware.js";
 import adminMiddleware from "./middlewares/admin.middleware.js";
+import dreamsAdminRoutes from "./routes/admin/dreams.admin.routes.js";
+import router from "./routes/admin/dreams.admin.routes.js";
 
 const app = express();
 
@@ -39,14 +41,18 @@ app.get('/', async (req,res) => {
     res.render('public/index.html', {});
 });
 
-app.use(usersRoutes);
 app.use(dreamsRoutes);
+app.use(usersRoutes);
 // end: public module
 
 // admin module
-app.get('/admin', authMiddleware, adminMiddleware, async (req,res) => {
+app.use('/admin', authMiddleware, adminMiddleware);
+
+app.get('/admin', async (req,res) => {
     res.render('admin/index.html', {});
 });
+
+app.use('/admin', dreamsAdminRoutes);
 
 
 // end: admin module

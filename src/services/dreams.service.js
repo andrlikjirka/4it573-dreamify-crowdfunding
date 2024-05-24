@@ -16,3 +16,18 @@ export const findShowedAcceptedDreamsByCategory = async (category) => {
     return dreams;
 };
 
+export const findAllDreams = async () => {
+    const dreams  = await Dream.find(
+        {deleted: false},
+        {},
+        {});
+    return dreams;
+};
+
+export const getDreamById = async (id) => {
+    const dream  = await Dream.findById(
+        {_id: id},
+        {},
+        {});
+    return dream;
+};
