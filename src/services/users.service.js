@@ -1,5 +1,4 @@
 import {User} from "../model/user.model.js";
-import bcrypt from "bcrypt";
 
 export const findAllUsers = async () => {
     const users = await User.find(
@@ -10,11 +9,18 @@ export const findAllUsers = async () => {
     return users;
 }
 
-export const getUserById = async (id) => {
+export const getUserById = async (id, blocked = false, deleted = false) => {
     const user = await User.findOne(
-        {_id: id},
+        {_id: id, blocked: blocked, deleted: deleted},
         {},
         {});
     return user;
 };
 
+export const getUserByEmail = async (email, blocked = false, deleted = false) => {
+    const user = await User.findOne(
+        {email: email, blocked: blocked, deleted: deleted},
+        {},
+        {});
+    return user;
+};

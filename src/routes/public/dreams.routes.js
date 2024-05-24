@@ -11,6 +11,7 @@ import {
 } from "../../services/dreams.service.js";
 import {Contribution} from "../../model/contribution.model.js";
 import {startSession} from "mongoose";
+import loggedUserIsDreamAuthorMiddleware from "../../middlewares/loggedUserIsDreamAuthor.middleware.js";
 
 const router = express.Router();
 
@@ -54,10 +55,7 @@ router.post('/dreams', authMiddleware, fileUploadMiddleware.single('file'), asyn
 });
 
 router.get('/dreams/:id', async (req, res, next) => {
-    const dream =  await Dream.findById(
-        {_id: req.params.id},
-        {},
-        {});
+    const dream =  await getDreamById(req.params.id);
     if (!dream) return next();
 
     const contributions = await findAllContributionsByDreamId(req.params.id);
@@ -130,9 +128,8 @@ router.get('/my-dreams', authMiddleware, async (req, res) => {
     });
 });
 
-router.get('/my-dreams/:id', authMiddleware, async (req, res, next) => {
-    const dream = await Dream.findById({_id: req.params.id},{},{});
-
+router.get('/my-dreams/:id', authMiddleware, loggedUserIsDreamAuthorMiddleware, async (req, res, next) => {
+    const dream = await getDreamById(req.params.id);
     if (!dream) return next();
 
     res.render('public/dreams/my-dreams.edit.html', {
@@ -141,12 +138,8 @@ router.get('/my-dreams/:id', authMiddleware, async (req, res, next) => {
 });
 
 // TODO: middleware na validaci formuláře
-router.put('/my-dreams/:id', authMiddleware, async (req, res, next) => {
-    let dream = await Dream.findById(
-        {_id: req.params.id},
-        {},
-        {});
-
+router.put('/my-dreams/:id', authMiddleware, loggedUserIsDreamAuthorMiddleware, async (req, res, next) => {
+    let dream = await getDreamById(req.params.id);
     if (!dream) return next();
 
     if (req.body.dreamName) dream.name = req.body.dreamName;
@@ -167,16 +160,11 @@ router.put('/my-dreams/:id', authMiddleware, async (req, res, next) => {
     res.redirect('back');
 });
 
-router.delete('/my-dreams/:id', authMiddleware, async (req, res, next) => {
-   const dream = await Dream.findOne(
-       {_id: req.params.id},
-       {},
-       {});
-
+router.delete('/my-dreams/:id', authMiddleware, loggedUserIsDreamAuthorMiddleware, async (req, res, next) => {
+   const dream = await getDreamById(req.params.id);
    if (!dream) return next();
 
    dream.deleted = true;
-
     try {
         await dream.save();
         console.log(`Successfully marked as deleted dream: ${dream._id}`);
@@ -187,14 +175,10 @@ router.delete('/my-dreams/:id', authMiddleware, async (req, res, next) => {
     res.redirect('back');
 });
 
-router.post('/my-dreams/:id/photos', authMiddleware, fileUploadMiddleware.single('file'), async (req, res, next) => {
+router.post('/my-dreams/:id/photos', authMiddleware, loggedUserIsDreamAuthorMiddleware, fileUploadMiddleware.single('file'), async (req, res, next) => {
     if (!req.file) return res.redirect('back');
 
-    let dream = await Dream.findById(
-        {_id: req.params.id},
-        {},
-        {});
-
+    let dream = await getDreamById(req.params.id);
     if (!dream) return next();
 
     dream.photos.push({name: req.file.filename});
@@ -208,9 +192,8 @@ router.post('/my-dreams/:id/photos', authMiddleware, fileUploadMiddleware.single
     res.redirect('back');
 });
 
-router.delete('/my-dreams/:id/photos/:photoId', authMiddleware, async (req, res, next) => {
-    let dream = await Dream.findById(req.params.id, {}, {});
-
+router.delete('/my-dreams/:id/photos/:photoId', authMiddleware, loggedUserIsDreamAuthorMiddleware, async (req, res, next) => {
+    let dream = await getDreamById(req.params.id)
     if (!dream) return next();
 
     let photo = dream.photos.id(req.params.photoId);

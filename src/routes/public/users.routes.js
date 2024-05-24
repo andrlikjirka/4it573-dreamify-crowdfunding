@@ -3,6 +3,7 @@ import {User} from "../../model/user.model.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import authMiddleware from "../../middlewares/auth.middleware.js";
+import {getUserByEmail, getUserById} from "../../services/users.service.js";
 
 const router = express.Router();
 
@@ -43,15 +44,13 @@ router.get('/login', (req, res) => {
 });
 
 router.post('/login', async (req, res) => {
-   const email = req.body.email;
-   const password = req.body.password;
    try {
-      const user = await User.findOne({email: email, blocked: false, deleted: false}, {}, {})
+      const user = await getUserByEmail(req.body.email, false, false);
       if (!user) {
          //TODO: flashmessage??? "Authentication failed"
          return res.redirect('back');
       }
-      const hashMatch = await bcrypt.compare(password, user.hash);
+      const hashMatch = await bcrypt.compare(req.body.password, user.hash);
       if (!hashMatch) {
          //TODO: flashmessage??? "Authentication failed"
          return res.redirect('back');
@@ -74,7 +73,7 @@ router.get('/logout', (req, res) => {
 });
 
 router.get('/profile', authMiddleware, async (req, res, next) => {
-   const user = await User.findOne({_id: res.locals.userIdentity.id},{},{});
+   const user = await getUserById(res.locals.userIdentity.id, false, false);
    if (!user) return next();
 
    res.render('public/users/profile.index.html', {
@@ -83,7 +82,7 @@ router.get('/profile', authMiddleware, async (req, res, next) => {
 });
 
 router.put('/profile', authMiddleware, async (req, res, next) => {
-   let user = await User.findOne({_id: res.locals.userIdentity.id},{},{});
+   let user = await getUserById(res.locals.userIdentity.id, false, false);
 
    if (req.body.name) user.name = req.body.name;
    if (req.body.email) user.email = req.body.email;
