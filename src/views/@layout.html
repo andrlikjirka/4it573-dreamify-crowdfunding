@@ -33,16 +33,16 @@
                     </li>
                 </ul>
 
-                {% if user %}
+                {% if userIdentity %}
 
                 <div class="dropdown">
                     <button class="btn btn-primary dropdown-toggle px-3 py-1" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                        {{ user.name }}
+                        {{ userIdentity.name }}
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                         <li><a class="dropdown-item" href="/profile">Můj profil</a></li>
                         <li><a class="dropdown-item" href="/my-dreams">Moje sny</a></li>
-                        {% if user.role == 'admin' %}
+                        {% if userIdentity.role == 'admin' %}
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="/admin">Administrace aplikace</a></li>
                         {% endif %}

@@ -30,8 +30,8 @@ router.post('/dreams', authMiddleware, fileUploadMiddleware.single('file'), asyn
         goal: req.body.dreamGoal,
         dueDate: req.body.dreamDate,
         author: {
-            author_id: res.locals.user.id,
-            author_name: res.locals.user.name
+            author_id: res.locals.userIdentity.id,
+            author_name: res.locals.userIdentity.name
         }
     });
     dream.photos.push({name: req.file.filename});
@@ -65,7 +65,7 @@ router.get('/new-dream', authMiddleware, (req, res) => {
 
 router.get('/my-dreams', authMiddleware, async (req, res) => {
     const myDreams = await Dream.find(
-        {"author.author_id": res.locals.user.id, deleted: false},
+        {"author.author_id": res.locals.userIdentity.id, deleted: false},
         {},
         {});
 

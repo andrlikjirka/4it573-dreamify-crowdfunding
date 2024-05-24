@@ -74,7 +74,7 @@ router.get('/logout', (req, res) => {
 });
 
 router.get('/profile', authMiddleware, async (req, res, next) => {
-   const user = await User.findOne({_id: res.locals.user.id},{},{});
+   const user = await User.findOne({_id: res.locals.userIdentity.id},{},{});
    if (!user) return next();
 
    res.render('public/users/profile.index.html', {
@@ -83,7 +83,7 @@ router.get('/profile', authMiddleware, async (req, res, next) => {
 });
 
 router.put('/profile', authMiddleware, async (req, res, next) => {
-   let user = await User.findOne({_id: res.locals.user.id},{},{});
+   let user = await User.findOne({_id: res.locals.userIdentity.id},{},{});
 
    if (req.body.name) user.name = req.body.name;
    if (req.body.email) user.email = req.body.email;
