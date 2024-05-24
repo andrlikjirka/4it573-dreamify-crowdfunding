@@ -1,7 +1,5 @@
 import express from "express";
 import {findAllDreams, getDreamById} from "../../services/dreams.service.js";
-import authMiddleware from "../../middlewares/auth.middleware.js";
-import {Dream} from "../../model/dream.model.js";
 
 const router = express.Router();
 
