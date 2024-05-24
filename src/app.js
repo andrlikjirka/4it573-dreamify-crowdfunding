@@ -41,6 +41,9 @@ app.use(loadUserMiddleware);
 app.get('/', async (req,res) => {
     res.render('public/index.html', {});
 });
+app.get('/about', (req, res) => {
+    res.render('public/about.html', {});
+});
 app.use(dreamsRoutes);
 app.use(usersRoutes);
 // end: public module
