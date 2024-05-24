@@ -20,6 +20,7 @@ export const categories = new Map([
   ['music', 'Hudba'],
   ['movies', 'Film'],
   ['sport', 'Sport'],
+  ['entertainment', 'Zábava'],
   ['other', 'Ostatní'],
 ]);
 
