@@ -79,7 +79,7 @@ router.get('/my-dreams/:id', authMiddleware, async (req, res, next) => {
 
     if (!dream) return next();
 
-    res.render('public/dreams/my-dreams.detail.html', {
+    res.render('public/dreams/my-dreams.edit.html', {
         dream: dream
     });
 });
