@@ -8,7 +8,7 @@ export const connectDB = async () => {
         await mongoose.connect(MONGODB_URL, {
             user: process.env.DB_USER,
             pass: process.env.DB_PASSWORD,
-            dbName: 'crowdfunding'
+            dbName: process.env.DB_NAME
         });
         console.log('Connected to database');
     } catch (error) {
