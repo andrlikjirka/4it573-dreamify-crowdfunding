@@ -4,7 +4,7 @@ import {Dream} from "../../model/dream.model.js";
 import fileUploadMiddleware from "../../middlewares/fileUpload.middleware.js";
 import * as fs from "fs";
 import {
-    findAllContributionsByDreamId,
+    findAllContributionsByDreamId, findDreamsByAuthorId,
     findShowedAcceptedDreams,
     findShowedAcceptedDreamsByCategory,
     getDreamById
@@ -118,10 +118,7 @@ router.get('/new-dream', authMiddleware, (req, res) => {
 });
 
 router.get('/my-dreams', authMiddleware, async (req, res) => {
-    const myDreams = await Dream.find(
-        {"author.author_id": res.locals.userIdentity.id, deleted: false},
-        {},
-        {}).sort({created: -1});
+    const myDreams = await findDreamsByAuthorId(res.locals.userIdentity.id);
 
     res.render('public/dreams/my-dreams.index.html', {
         dreams: myDreams
