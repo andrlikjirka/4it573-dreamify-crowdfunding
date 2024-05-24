@@ -46,7 +46,7 @@ router.post('/login', async (req, res) => {
    const email = req.body.email;
    const password = req.body.password;
    try {
-      const user = await User.findOne({email: email}, {}, {})
+      const user = await User.findOne({email: email, blocked: false, deleted: false}, {}, {})
       if (!user) {
          //TODO: flashmessage??? "Authentication failed"
          return res.redirect('back');
@@ -87,13 +87,15 @@ router.put('/profile', authMiddleware, async (req, res, next) => {
 
    if (req.body.name) user.name = req.body.name;
    if (req.body.email) user.email = req.body.email;
-   if (req.body.password && req.body.password_confirm && (req.body.password === req.body.password_confirm)) {
-      console.log(req.body.password)
-      user.hash = await bcrypt.hash(req.body.password, 10);
-      res.clearCookie('jwt');
-   } else {
-      console.log('New passwords does not correspond to password confirmation. Update failed.')
-      return res.redirect('back');
+   if (req.body.password && req.body.password_confirm) {
+      if (req.body.password === req.body.password_confirm){
+         console.log(req.body.password)
+         user.hash = await bcrypt.hash(req.body.password, 10);
+         res.clearCookie('jwt');
+      } else {
+         console.log('New passwords does not correspond to password confirmation. Update failed.')
+         return res.redirect('back');
+      }
    }
 
    try {
