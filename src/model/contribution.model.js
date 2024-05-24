@@ -6,11 +6,10 @@ const contributionSchema = mongoose.Schema({
     amount: {
         type: Number,
         required: true,
-        min: 0
+        min: 1
     },
-    date: {
+    contributedAt: {
         type: Date,
-        required: true,
         default: Date.now()
     },
     contributor: {
@@ -27,16 +26,21 @@ const contributionSchema = mongoose.Schema({
     dream: {
         dream_id: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: Dream
+            ref: Dream,
+            required: true
+        },
+        dream_name: {
+            type: String,
+            required: true
         }
     },
+    /*
     state: {
         type: String,
-        required: true,
         default: 'waiting',
         enum: ['waiting', 'paid', 'cancelled']
     },
-
+    */
 });
 
 export  const Contribution = mongoose.model('Contribution', contributionSchema);

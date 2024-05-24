@@ -67,13 +67,17 @@ const dreamSchema = new mongoose.Schema({
             message: props => `Array of dream photos must have at least 1 element.`
         }
     },
+    contributors: {
+        type: Number,
+        default: 0
+    },
     created: {
         type: Date,
         default: Date.now(),
     },
     showed: {
         type: Boolean,
-        default: false
+        default: true
     },
     deleted: {
         type: Boolean,

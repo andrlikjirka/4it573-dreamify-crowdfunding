@@ -1,5 +1,5 @@
 import express from "express";
-import {findAllDreams, getDreamById} from "../../services/dreams.service.js";
+import {findAllContributionsByDreamId, findAllDreams, getDreamById} from "../../services/dreams.service.js";
 
 const router = express.Router();
 
@@ -14,9 +14,11 @@ router.get('/dreams', async (req, res) => {
 router.get('/dreams/:id', async (req, res, next) => {
     const dream = await getDreamById(req.params.id);
     if (!dream) return next();
+    const contributions = await findAllContributionsByDreamId(req.params.id);
 
     res.render('admin/dreams/dreams.detail.html', {
-        dream: dream
+        dream: dream,
+        contributions: contributions
     });
 });
 

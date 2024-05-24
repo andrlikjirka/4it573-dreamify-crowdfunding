@@ -3,7 +3,14 @@ import authMiddleware from "../../middlewares/auth.middleware.js";
 import {Dream} from "../../model/dream.model.js";
 import fileUploadMiddleware from "../../middlewares/fileUpload.middleware.js";
 import * as fs from "fs";
-import {findShowedAcceptedDreams, findShowedAcceptedDreamsByCategory} from "../../services/dreams.service.js";
+import {
+    findAllContributionsByDreamId,
+    findShowedAcceptedDreams,
+    findShowedAcceptedDreamsByCategory,
+    getDreamById
+} from "../../services/dreams.service.js";
+import {Contribution} from "../../model/contribution.model.js";
+import {startSession} from "mongoose";
 
 const router = express.Router();
 
@@ -51,12 +58,61 @@ router.get('/dreams/:id', async (req, res, next) => {
         {_id: req.params.id},
         {},
         {});
-
     if (!dream) return next();
 
+    const contributions = await findAllContributionsByDreamId(req.params.id);
+
     res.render('public/dreams/dreams.detail.html', {
-        dream: dream
+        dream: dream,
+        contributions: contributions
     });
+});
+
+router.get('/dreams/:id/contribute', authMiddleware, async (req, res, next) => {
+    const dream =  await getDreamById(req.params.id);
+    if (!dream) return next();
+
+    res.render('public/dreams/contribute.html', {
+       dream: dream
+   });
+});
+
+router.post('/dreams/:id/contribute', authMiddleware, async (req, res, next) => {
+    const dream =  await getDreamById(req.params.id);
+    if (!dream) return next();
+
+    const contribution = new Contribution({
+        amount: Number(req.body.contribution),
+        contributor: {
+            contributor_id: res.locals.userIdentity.id,
+            contributor_name: res.locals.userIdentity.name
+        },
+        dream: {
+            dream_id: dream.id,
+            dream_name: dream.name
+        }
+    });
+    dream.pledged += Number(req.body.contribution);
+    dream.contributors += 1;
+
+    const session = await startSession();
+    try {
+        session.startTransaction();
+
+        await contribution.save();
+        await dream.save();
+
+        await session.commitTransaction();
+        await session.endSession();
+       console.log(`Successfully added new contribution to the dream: ${dream.id}`);
+    } catch (err) {
+        await session.abortTransaction()
+        await session.endSession()
+
+        console.error(err.message);
+        return res.redirect('back');
+    }
+    res.redirect('/dreams/' + req.params.id)
 });
 
 router.get('/new-dream', authMiddleware, (req, res) => {
@@ -67,7 +123,7 @@ router.get('/my-dreams', authMiddleware, async (req, res) => {
     const myDreams = await Dream.find(
         {"author.author_id": res.locals.userIdentity.id, deleted: false},
         {},
-        {});
+        {}).sort({created: -1});
 
     res.render('public/dreams/my-dreams.index.html', {
         dreams: myDreams

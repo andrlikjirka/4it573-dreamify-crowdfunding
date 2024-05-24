@@ -1,4 +1,5 @@
 import {Dream} from "../model/dream.model.js";
+import {Contribution} from "../model/contribution.model.js";
 
 export const findShowedAcceptedDreams = async () => {
     const dreams  = await Dream.find(
@@ -30,4 +31,13 @@ export const getDreamById = async (id) => {
         {},
         {});
     return dream;
+};
+
+export const findAllContributionsByDreamId = async (id) => {
+    const contributions = await Contribution.find(
+        {"dream.dream_id": id},
+        {},
+        {}
+    ).sort({contributedAt: -1});
+    return contributions;
 };
