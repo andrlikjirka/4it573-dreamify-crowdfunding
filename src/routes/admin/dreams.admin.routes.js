@@ -11,8 +11,9 @@ router.get('/dreams', async (req, res) => {
     });
 });
 
-router.get('/dreams/:id', async (req, res) => {
+router.get('/dreams/:id', async (req, res, next) => {
     const dream = await getDreamById(req.params.id);
+    if (!dream) return next();
 
     res.render('admin/dreams/dreams.detail.html', {
         dream: dream
