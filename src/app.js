@@ -13,6 +13,7 @@ import authMiddleware from "./middlewares/auth.middleware.js";
 import adminMiddleware from "./middlewares/admin.middleware.js";
 import dreamsAdminRoutes from "./routes/admin/dreams.admin.routes.js";
 import router from "./routes/admin/dreams.admin.routes.js";
+import usersAdminRoutes from "./routes/admin/users.admin.routes.js";
 
 const app = express();
 
@@ -40,21 +41,17 @@ app.use(loadUserMiddleware);
 app.get('/', async (req,res) => {
     res.render('public/index.html', {});
 });
-
 app.use(dreamsRoutes);
 app.use(usersRoutes);
 // end: public module
 
 // admin module
 app.use('/admin', authMiddleware, adminMiddleware);
-
 app.get('/admin', async (req,res) => {
     res.render('admin/index.html', {});
 });
-
 app.use('/admin', dreamsAdminRoutes);
-
-
+app.use('/admin', usersAdminRoutes);
 // end: admin module
 
 app.use((req, res, next) => {
