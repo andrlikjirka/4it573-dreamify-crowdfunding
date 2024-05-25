@@ -30,13 +30,12 @@
                     <div class="">
                         <form action="/dreams/{{ dream._id }}/contribute" method="post">
                             <label for="contribution" class="form-label">Výše příspěvku v Kč</label>
-                            <div class="d-flex flex-row">
-                               <div class="input-group me-4">
+                            <div class="d-flex flex-column flex-md-row">
+                               <div class="input-group me-4 mb-3 mb-md-0">
                                    <span class="input-group-text" id="fund">Kč</span>
                                    <input id="contribution" type="number" name="contribution" class="form-control form-control-lg" aria-label="contribution" aria-describedby="contribution" min="1" required>
-
                                </div>
-                               <button type="submit" class="btn btn-primary px-5">Přispět</button>
+                               <button type="submit" class="btn btn-primary py-2 px-5">Přispět</button>
                            </div>
                         </form>
                     </div>
