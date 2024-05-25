@@ -12,6 +12,7 @@ import {
 import {Contribution} from "../../model/contribution.model.js";
 import {startSession} from "mongoose";
 import loggedUserIsDreamAuthorMiddleware from "../../middlewares/loggedUserIsDreamAuthor.middleware.js";
+import {sendDreamCardToAllConnections, sendDreamDetailToAllConnections} from "../../websockets.js";
 
 const router = express.Router();
 
@@ -110,6 +111,12 @@ router.post('/dreams/:id/contribute', authMiddleware, async (req, res, next) => 
         console.error(err.message);
         return res.redirect('back');
     }
+    sendDreamCardToAllConnections(dream._id)
+        .catch((e) => {
+            console.error(e)});
+    sendDreamDetailToAllConnections(dream._id)
+        .catch((e) => {
+            console.error(e)});
     res.redirect('/dreams/' + req.params.id)
 });
 

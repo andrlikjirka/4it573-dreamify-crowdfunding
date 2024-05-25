@@ -1,0 +1,124 @@
+<div id="{{ dream._id }}">
+    <div class="row mb-2">
+        <div class="col-12">
+            <h3>{{ dream.name }}</h3>
+            <div class="py-2">
+                Autor: <span class="fw-medium">{{ dream.author.author_name }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3 mb-5">
+        {% if dream.photos.length > 0 %}
+        <div class="col-12 col-md-6">
+            <div id="carouselExample" class="carousel carousel-dark slide">
+                <div class="carousel-inner">
+                    {% for photo in dream.photos %}
+                    <div class="carousel-item {% if loop.first%} active {%endif%}">
+                        <div class="d-flex justify-content-center img-fluid">
+                            <img src="/uploads/dreams/{{ photo.name }}" class="d-block" alt="..." style="max-width: 500px; max-height: 500px">
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+        {% endif %}
+        <div class="col-12 col-md-6">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <p>{{ dream.summary }}</p>
+                </div>
+            </div>
+            <div class="mb-3">
+                <div class="">Vybráno</div>
+                <div class="fw-bolder fs-3">
+                    <span>{{ dream.pledged }}</span>
+                    <span>Kč</span>
+                </div>
+                <div class="fw-medium fs-5">
+                    <span>z</span>
+                    <span>{{ dream.goal }}</span>
+                    <span>Kč</span>
+                </div>
+            </div>
+            <div class="mb-3">
+                <div class="">Přispělo</div>
+                <div class="fw-medium fs-4">
+                    <span>{{ dream.contributors }}</span>
+                    <span>lidí</span>
+                </div>
+            </div>
+            <div class="mb-4">
+                <div>Zbývá</div>
+                <div class="fw-medium fw-medium fs-4">
+                    <span>{{ dream.dateDiff }}</span>
+                    <span>dnů</span>
+                </div>
+            </div>
+
+            <form class="row row-cols-lg-auto gx-3 align-items-center">
+                <div class="col-auto">
+                    <a href="/dreams/{{ dream._id }}/contribute" class="btn btn-primary btn-lg fw-medium" style="padding: 10px 70px">Přispět</a>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-12">
+            <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <button class="nav-link active text-dark" id="nav-description-tab" data-bs-toggle="tab"
+                            data-bs-target="#nav-description" type="button" role="tab" aria-controls="nav-description"
+                            aria-selected="true">O čem sním
+                    </button>
+                    <button class="nav-link text-dark" id="nav-reviews-tab" data-bs-toggle="tab"
+                            data-bs-target="#nav-funders" type="button" role="tab" aria-controls="nav-funders"
+                            aria-selected="false">Přispěvatelé
+                    </button>
+                </div>
+            </nav>
+
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active pt-4 px-3" id="nav-description" role="tabpanel" aria-labelledby="nav-description" tabindex="0">
+                    <p>{{ dream.description }}</p>
+                </div>
+                <div class="tab-pane fade show pt-4 px-3" id="nav-funders" role="tabpanel" aria-labelledby="nav-funders" tabindex="0">
+                    {% if contributions.length > 0 %}
+                    <h5 class="mb-3">Všichni, kteří přispěli:</h5>
+                    <div class="row">
+                        <div class="col-12 col-md-8">
+                            {% for contribution in contributions %}
+                            <div class="card mb-1">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-4">{{ contribution.contributor.contributor_name }}</div>
+                                        <div class="col-4">{{ contribution.amount }} Kč</div>
+                                        <div class="col-4">{{ contribution.contributedAt | date("DD.MM.YYYY") }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-primary fade show py-2 mb-5" role="alert">
+                        <span class="small">Na realizaci tohoto snu zatím nikdo nepřispěl.</span>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -22,41 +22,7 @@
     <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 mb-5">
         {% for dream in dreams %}
         <div class="col">
-            <div class="card">
-                {% if dream.photos.length > 0 %}
-                <a href="/dreams/{{ dream._id }}">
-                    <img src="/uploads/dreams/{{ dream.photos[0].name }}" class="card-img-top w-100 img-fluid ms-auto me-auto" alt="..."
-                         style="height: 250px; width: auto; object-fit: cover">
-                </a>
-                {% endif %}
-                <div class="card-body px-4">
-                    <h5 class="card-title mt-1">
-                        <a href="dreams/{{ dream._id }}" class="text-decoration-none link-opacity-75-hover link-dark">{{ dream.name }}</a>
-                    </h5>
-                    <div class="card-text">
-                        <div class="d-flex flex-row justify-content-between mb-2">
-                            <div class="small">Autor: <span class="fw-medium">{{ dream.author.author_name }}</span></div>
-                            <div><span class="badge text-bg-primary">{{ categories.get(dream.category) }}</span></div>
-                        </div>
-                        <div class="mb-2 d-flex flex-row">
-                            <div>
-                                <span>Zbývá: </span>
-                                <span>{{ dream.dateDiff }}</span>
-                                <span>dnů</span>
-                            </div>
-                        </div>
-                        <p class="mb-2">{{ dream.summary }}</p>
-                        <div>Vybráno
-                            <div class="fw-medium">
-                                <span class="fs-5   ">{{ dream.pledged }} Kč</span>
-                                <span> z </span>
-                                <span>{{ dream.goal }} Kč</span>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
+            {% include "public/dreams/_dream.card.html" %}
         </div>
         {% endfor %}
     </div>
@@ -68,4 +34,16 @@
 
 </div>
 
+<script>
+    const ws = new WebSocket('ws://localhost:3001')
+
+    ws.addEventListener('message', (event) => {
+        const data = JSON.parse(event.data);
+        if (data.type === 'dreamCard') {
+            document.getElementById(data.dreamId).innerHTML = data.html;
+        }
+    });
+</script>
+
 {% endblock %}
+
