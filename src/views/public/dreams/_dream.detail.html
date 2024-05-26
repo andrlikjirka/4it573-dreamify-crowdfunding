@@ -61,14 +61,16 @@
             <div class="mb-4">
                 <div>Zbývá</div>
                 <div class="fw-medium fw-medium fs-4">
-                    <span>{{ dream.dateDiff }}</span>
+                    <span>{% if dream.dateDiff > 0 %} {{ dream.dateDiff}} {% else %} 0 {% endif %}</span>
                     <span>dnů</span>
                 </div>
             </div>
 
             <form class="row row-cols-lg-auto gx-3 align-items-center">
                 <div class="col-auto">
-                    <a href="/dreams/{{ dream._id }}/contribute" class="btn btn-primary btn-lg fw-medium" style="padding: 10px 70px">Přispět</a>
+                    <a href="/dreams/{{ dream._id }}/contribute" class="btn btn-primary btn-lg fw-medium
+                        {% if dream.dateDiff <= 0 %} disabled {% endif %}
+                        " style="padding: 10px 70px">Přispět</a>
                 </div>
             </form>
 

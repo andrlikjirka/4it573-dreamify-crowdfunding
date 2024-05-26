@@ -17,7 +17,7 @@
             <div class="mb-2 d-flex flex-row">
                 <div>
                     <span>Zbývá: </span>
-                    <span>{{ dream.dateDiff }}</span>
+                    <span>{% if dream.dateDiff > 0 %} {{ dream.dateDiff}} {% else %} 0 {% endif %}</span>
                     <span>dnů</span>
                 </div>
             </div>
