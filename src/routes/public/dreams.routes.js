@@ -13,6 +13,8 @@ import {Contribution} from "../../model/contribution.model.js";
 import {startSession} from "mongoose";
 import loggedUserIsDreamAuthorMiddleware from "../../middlewares/loggedUserIsDreamAuthor.middleware.js";
 import {sendDreamCardToAllConnections, sendDreamDetailToAllConnections} from "../../websockets.js";
+import sanitizeHtml from "sanitize-html";
+import {tinyMceOptions} from "../../utils.js";
 
 const router = express.Router();
 
@@ -31,11 +33,12 @@ router.get('/dreams', async (req, res) => {
 
 //TODO: middleware pro validaci dat pro vytvoření snu
 router.post('/dreams', authMiddleware, fileUploadMiddleware.single('file'), async (req, res) => {
+
     const dream = new Dream({
         name: req.body.dreamName,
         summary: req.body.dreamSummary,
         category: req.body.dreamCategory,
-        description: req.body.dreamDescription,
+        description: sanitizeHtml(req.body.dreamDescription, tinyMceOptions),
         goal: req.body.dreamGoal,
         dueDate: req.body.dreamDate,
         author: {
@@ -56,7 +59,7 @@ router.post('/dreams', authMiddleware, fileUploadMiddleware.single('file'), asyn
 });
 
 router.get('/dreams/:id', async (req, res, next) => {
-    const dream =  await getDreamById(req.params.id);
+    const dream = await getDreamById(req.params.id);
     if (!dream) return next();
 
     const contributions = await findAllContributionsByDreamId(req.params.id);
@@ -68,16 +71,16 @@ router.get('/dreams/:id', async (req, res, next) => {
 });
 
 router.get('/dreams/:id/contribute', authMiddleware, async (req, res, next) => {
-    const dream =  await getDreamById(req.params.id);
+    const dream = await getDreamById(req.params.id);
     if (!dream) return next();
 
     res.render('public/dreams/contribute.html', {
-       dream: dream
-   });
+        dream: dream
+    });
 });
 
 router.post('/dreams/:id/contribute', authMiddleware, async (req, res, next) => {
-    const dream =  await getDreamById(req.params.id);
+    const dream = await getDreamById(req.params.id);
     if (!dream) return next();
 
     const contribution = new Contribution({
@@ -103,7 +106,7 @@ router.post('/dreams/:id/contribute', authMiddleware, async (req, res, next) => 
 
         await session.commitTransaction();
         await session.endSession();
-       console.log(`Successfully added new contribution to the dream: ${dream.id}`);
+        console.log(`Successfully added new contribution to the dream: ${dream.id}`);
     } catch (err) {
         await session.abortTransaction()
         await session.endSession()
@@ -113,15 +116,17 @@ router.post('/dreams/:id/contribute', authMiddleware, async (req, res, next) => 
     }
     sendDreamCardToAllConnections(dream._id)
         .catch((e) => {
-            console.error(e)});
+            console.error(e)
+        });
     sendDreamDetailToAllConnections(dream._id)
         .catch((e) => {
-            console.error(e)});
+            console.error(e)
+        });
     res.redirect('/dreams/' + req.params.id)
 });
 
 router.get('/new-dream', authMiddleware, (req, res) => {
-   res.render('public/dreams/new-dream.html', {});
+    res.render('public/dreams/new-dream.html', {});
 });
 
 router.get('/my-dreams', authMiddleware, async (req, res) => {
@@ -149,7 +154,7 @@ router.put('/my-dreams/:id', authMiddleware, loggedUserIsDreamAuthorMiddleware, 
     if (req.body.dreamName) dream.name = req.body.dreamName;
     if (req.body.dreamSummary) dream.summary = req.body.dreamSummary;
     if (req.body.dreamCategory) dream.category = req.body.dreamCategory;
-    if (req.body.dreamDescription) dream.description = req.body.dreamDescription;
+    if (req.body.dreamDescription) dream.description = sanitizeHtml(req.body.dreamDescription, tinyMceOptions)
     if (req.body.dreamGoal) dream.goal = req.body.dreamGoal;
     if (req.body.dreamDate) dream.dueDate = req.body.dreamDate;
     if (req.body.showed) dream.showed = !dream.showed;
@@ -165,10 +170,10 @@ router.put('/my-dreams/:id', authMiddleware, loggedUserIsDreamAuthorMiddleware, 
 });
 
 router.delete('/my-dreams/:id', authMiddleware, loggedUserIsDreamAuthorMiddleware, async (req, res, next) => {
-   const dream = await getDreamById(req.params.id);
-   if (!dream) return next();
+    const dream = await getDreamById(req.params.id);
+    if (!dream) return next();
 
-   dream.deleted = true;
+    dream.deleted = true;
     try {
         await dream.save();
         console.log(`Successfully marked as deleted dream: ${dream._id}`);

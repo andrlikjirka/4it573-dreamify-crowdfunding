@@ -27,7 +27,7 @@
                 </div>
                 <div class="mb-4">
                     <label for="dream-description" class="form-label">Rozepiš se o svém snu</label>
-                    <textarea rows="10" id="dream-description" class="form-control" name="dreamDescription" placeholder="Popis tvého snu" required></textarea>
+                    <textarea rows="10" id="dream-description" class="form-control" name="dreamDescription" placeholder="Popis tvého snu"></textarea>
                 </div>
                 <div class="mb-4">
                     <label for="dream-goal" class="form-label">Kolik potřebuješ na realizaci svého snu?</label>
@@ -50,7 +50,15 @@
             </form>
         </div>
     </div>
-
 </div>
+
+<script>
+    tinymce.init({
+        selector: 'textarea#dream-description',
+        plugins: "link",
+        promotion: false,
+        branding: false,
+    });
+</script>
 
 {% endblock %}

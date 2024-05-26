@@ -1,3 +1,5 @@
+import sanitizeHtml from "sanitize-html";
+
 export const userRoles = new Map([
    ['admin', 'Administrátor'],
    ['user', 'Uživatel']
@@ -24,3 +26,11 @@ export const categories = new Map([
   ['other', 'Ostatní'],
 ]);
 
+export const tinyMceOptions = {
+    allowedTags: sanitizeHtml.defaults.allowedTags,
+    allowedAttributes: {
+        a: [ 'href', 'name', 'target' ],
+        img: [ 'src', 'srcset', 'alt', 'title', 'width', 'height', 'loading' ],
+        '*': ['style'],
+    },
+}

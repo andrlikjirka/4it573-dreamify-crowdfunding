@@ -93,8 +93,15 @@
 
         </div>
     </div>
-
-
 </div>
+
+<script>
+    tinymce.init({
+        selector: 'textarea#dream-description',
+        plugins: "link",
+        promotion: false,
+        branding: false,
+    });
+</script>
 
 {% endblock %}

@@ -12,7 +12,6 @@ import {categories, dreamStatus} from "./utils.js";
 import authMiddleware from "./middlewares/auth.middleware.js";
 import adminMiddleware from "./middlewares/admin.middleware.js";
 import dreamsAdminRoutes from "./routes/admin/dreams.admin.routes.js";
-import router from "./routes/admin/dreams.admin.routes.js";
 import usersAdminRoutes from "./routes/admin/users.admin.routes.js";
 
 const app = express();
