@@ -15,6 +15,7 @@ import loggedUserIsDreamAuthorMiddleware from "../../middlewares/loggedUserIsDre
 import {sendDreamCardToAllConnections, sendDreamDetailToAllConnections} from "../../websockets.js";
 import sanitizeHtml from "sanitize-html";
 import {tinyMceOptions} from "../../utils.js";
+import dreamApprovedNotDueMiddleware from "../../middlewares/dreamApprovedNotDue.middleware.js";
 
 const router = express.Router();
 
@@ -79,7 +80,7 @@ router.get('/dreams/:id/contribute', authMiddleware, async (req, res, next) => {
     });
 });
 
-router.post('/dreams/:id/contribute', authMiddleware, async (req, res, next) => {
+router.post('/dreams/:id/contribute', authMiddleware, dreamApprovedNotDueMiddleware, async (req, res, next) => {
     const dream = await getDreamById(req.params.id);
     if (!dream) return next();
 

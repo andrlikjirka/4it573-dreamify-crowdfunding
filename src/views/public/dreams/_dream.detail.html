@@ -69,7 +69,7 @@
             <form class="row row-cols-lg-auto gx-3 align-items-center">
                 <div class="col-auto">
                     <a href="/dreams/{{ dream._id }}/contribute" class="btn btn-primary btn-lg fw-medium
-                        {% if dream.dateDiff <= 0 %} disabled {% endif %}
+                        {% if (dream.status !== 'approved' or dream.dateDiff <= 0) %} disabled {% endif %}
                         " style="padding: 10px 70px">Přispět</a>
                 </div>
             </form>
