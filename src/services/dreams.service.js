@@ -34,8 +34,16 @@ export const findDreamsByAuthorId = async (id) => {
 };
 
 export const getDreamById = async (id) => {
-    const dream  = await Dream.findById(
-        {_id: id},
+    const dream  = await Dream.findOne(
+        {_id: id, deleted: false},
+        {},
+        {});
+    return dream;
+};
+
+export const getShowedDreamById = async (id) => {
+    const dream  = await Dream.findOne(
+        {_id: id, showed: true, deleted: false},
         {},
         {});
     return dream;

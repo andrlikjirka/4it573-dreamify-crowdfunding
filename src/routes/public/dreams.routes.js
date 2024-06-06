@@ -7,7 +7,7 @@ import {
     findAllContributionsByDreamId, findDreamsByAuthorId,
     findShowedAcceptedDreams,
     findShowedAcceptedDreamsByCategory,
-    getDreamById
+    getDreamById, getShowedDreamById
 } from "../../services/dreams.service.js";
 import {Contribution} from "../../model/contribution.model.js";
 import {startSession} from "mongoose";
@@ -83,7 +83,7 @@ router.get('/dreams/:id/contribute', authMiddleware, async (req, res, next) => {
 });
 
 router.post('/dreams/:id/contribute', authMiddleware, dreamApprovedNotDueMiddleware, async (req, res, next) => {
-    const dream = await getDreamById(req.params.id);
+    const dream = await getShowedDreamById(req.params.id);
     if (!dream) return next();
 
     const contribution = new Contribution({

@@ -11,7 +11,7 @@ export const findAllUsers = async () => {
 
 export const getUserById = async (id, blocked = false, deleted = false) => {
     const user = await User.findOne(
-        {_id: id, blocked: blocked, deleted: deleted},
+        {_id: id, deleted: deleted},
         {},
         {});
     return user;
