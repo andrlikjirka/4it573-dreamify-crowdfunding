@@ -52,8 +52,10 @@ router.post('/dreams', authMiddleware, fileUploadMiddleware.single('file'), asyn
     try {
         await dream.save();
         console.log(`Successfully added a new dream.`);
+        req.session.flash = {type: 'success', message: `Přidání Vašeho nového snu proběhlo úspěšně.`};
     } catch (err) {
         console.error(err.message);
+        req.session.flash = {type: 'danger', message: `Přidání Vašeho nového snu se nezdařilo.`};
         return res.redirect('back');
     }
     res.redirect('/my-dreams');
@@ -101,18 +103,17 @@ router.post('/dreams/:id/contribute', authMiddleware, dreamApprovedNotDueMiddlew
     const session = await startSession();
     try {
         session.startTransaction();
-
         await contribution.save();
         await dream.save();
-
         await session.commitTransaction();
         await session.endSession();
         console.log(`Successfully added new contribution to the dream: ${dream.id}`);
+        req.session.flash = {type: 'success', message: `Děkujeme za Váš příspěvek na realizaci daného snu.`};
     } catch (err) {
         await session.abortTransaction()
         await session.endSession()
-
         console.error(err.message);
+        req.session.flash = {type: 'danger', message: `Přispěvek na zvolený se se nepodařilo zpracovat.`};
         return res.redirect('back');
     }
     sendDreamCardToAllConnections(dream._id)
@@ -163,8 +164,10 @@ router.put('/my-dreams/:id', authMiddleware, loggedUserIsDreamAuthorMiddleware, 
     try {
         await dream.save();
         console.log(`Successfully updated dream: ${dream._id}`);
+        req.session.flash = {type: 'success', message: `Úprava Vašeho snu proběhla úspěšně.`};
     } catch (err) {
         console.error(err.message);
+        req.session.flash = {type: 'danger', message: `Úprava Vašeho snu se nezdařila.`};
         return res.redirect('back');
     }
     res.redirect('back');
@@ -178,8 +181,10 @@ router.delete('/my-dreams/:id', authMiddleware, loggedUserIsDreamAuthorMiddlewar
     try {
         await dream.save();
         console.log(`Successfully marked as deleted dream: ${dream._id}`);
+        req.session.flash = {type: 'success', message: `Zvolený sen byl úspěšně odebrán.`};
     } catch (err) {
         console.error(err.message);
+        req.session.flash = {type: 'danger', message: `Odebrání zvoleného snu se nezdařilo.`};
         return res.redirect('back');
     }
     res.redirect('back');
@@ -195,8 +200,10 @@ router.post('/my-dreams/:id/photos', authMiddleware, loggedUserIsDreamAuthorMidd
     try {
         await dream.save();
         console.log(`Successfully added a photo to dream: ${dream._id}`);
+        req.session.flash = {type: 'success', message: `Nahrání obrázku k vašemu snu proběhlo úspěšně.`};
     } catch (err) {
         console.error(err.message);
+        req.session.flash = {type: 'danger', message: `Nahrání obrázku k vašemu snu se nezdařilo.`};
         return res.redirect('back');
     }
     res.redirect('back');
@@ -211,18 +218,27 @@ router.delete('/my-dreams/:id/photos/:photoId', authMiddleware, loggedUserIsDrea
     dream.photos.pull(photo);
 
     const filePath = 'public/uploads/dreams/' + photo.name;
+    const session = await startSession();
     try {
+        session.startTransaction();
         await dream.save();
         fs.unlink(filePath, (err) => {
             if (err) {
                 console.error(`Failed to delete file: ${err.message}`);
+            } else {
+                console.log(`Successfully deleted file: ${filePath}`);
             }
-            console.log(`Successfully deleted file: ${filePath}`);
         });
+        await session.commitTransaction();
+        await session.endSession();
     } catch (err) {
+        await session.abortTransaction()
+        await session.endSession()
         console.error(err.message);
+        req.session.flash = {type: 'danger', message: `Odebrání obrázku se nezdařilo.`};
         return res.redirect('back');
     }
+    req.session.flash = {type: 'success', message: `Odebrání obrázku proběhlo úspěšně.`};
     res.redirect('back');
 });
 

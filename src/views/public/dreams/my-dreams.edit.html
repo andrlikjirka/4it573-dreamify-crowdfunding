@@ -71,7 +71,7 @@
             <form action="/my-dreams/{{ dream._id }}/photos" method="post" enctype="multipart/form-data">
                 <label for="formFile" class="form-label">Obrázky tvého snu</label>
                 <div class="d-flex flex-row">
-                    <input class="form-control me-3" type="file" id="formFile" name="file" accept="image/png, image/jpeg">
+                    <input class="form-control me-3" type="file" id="formFile" name="file" accept="image/png, image/jpeg" required>
                     <button type="submit" class="btn btn-primary px-4">Nahrát</button>
                 </div>
             </form>

@@ -34,8 +34,10 @@ router.put('/users/:id', async (req, res, next) => {
     try {
         await user.save();
         console.log(`Successfully updated user info: ${user._id}`);
+        req.session.flash = {type: 'success', message: `Úprava uživatele proběhla úspěšně.`};
     } catch (err) {
         console.error(err.message);
+        req.session.flash = {type: 'danger', message: `Úprava uživatele se nezdařila.`};
         return res.redirect('back');
     }
     res.redirect('back');
@@ -50,8 +52,10 @@ router.delete('/users/:id', async (req, res, next) => {
     try {
         await user.save();
         console.log(`ADMIN: Successfully marked as deleted user: ${user._id}`);
+        req.session.flash = {type: 'success', message: `Odebrání uživatele proběhlo úspěšně.`};
     } catch (err) {
         console.error(err.message);
+        req.session.flash = {type: 'danger', message: `Odebrání uživatele se nezdařilo.`};
         return res.redirect('back');
     }
     res.redirect('back');

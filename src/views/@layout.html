@@ -74,6 +74,15 @@
 </header>
 
 <main>
+    {% if flash %}
+    <div class="container px-5 pt-4 pb-0">
+        <div class="alert alert-{{flash.type}} alert-dismissible fade show small py-2" role="alert">
+            {{ flash.message }}
+            <button type="button" class="btn-close pe-3 pb-1" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+    {% endif %}
+
     {% block content %}
     {% endblock %}
 </main>

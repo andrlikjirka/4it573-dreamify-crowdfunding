@@ -15,7 +15,7 @@ router.post('/register', async (req, res) => {
    const password = req.body.password;
    const passwordConfirmation = req.body.password_confirm;
    if (password !== passwordConfirmation) {
-      //TODO: flashmessage??? "Chybné potvrzené hesla"
+      req.session.flash = {type: 'danger', message: `Zadaná hesla se neshodují.`};
       return res.redirect('back');
    }
    try {
@@ -30,10 +30,10 @@ router.post('/register', async (req, res) => {
       const token = jwt.sign({userId: user._id, role: user.role}, process.env.JWT_SECRET_KEY, {expiresIn: '1h'});
       console.log('User authenticated' + user._id);
       res.cookie('jwt', token);
-      //TODO: flashmessage??? "Login successful"
+      req.session.flash = {type: 'success', message: `Registrace a první přihlášení proběhly úspěšně.`};
       res.redirect('/');
    } catch (err) {
-      //TODO: flashmessage??? "Registration failed"
+      req.session.flash = {type: 'danger', message: `Registrace se nezdařila.`};
       console.error(err.message);
       res.redirect('back');
    }
@@ -47,21 +47,21 @@ router.post('/login', async (req, res) => {
    try {
       const user = await getUserByEmail(req.body.email, false, false);
       if (!user) {
-         //TODO: flashmessage??? "Authentication failed"
+         req.session.flash = {type: 'danger', message: `Zadané přihlašovací údaje jsou neplatné.`};
          return res.redirect('back');
       }
       const hashMatch = await bcrypt.compare(req.body.password, user.hash);
       if (!hashMatch) {
-         //TODO: flashmessage??? "Authentication failed"
+         req.session.flash = {type: 'danger', message: `Zadané přihlašovací údaje jsou neplatné.`};
          return res.redirect('back');
       }
       const token = jwt.sign({userId: user._id, role: user.role}, process.env.JWT_SECRET_KEY, {expiresIn: '1h'});
       res.cookie('jwt', token);
-      //TODO: flashmessage??? "Login successful"
+      req.session.flash = {type: 'success', message: `Přihlášení proběhlo úspěšně.`};
       res.redirect('/');
 
    } catch (err) {
-      //TODO: flashmessage??? "Login failed"
+      req.session.flash = {type: 'danger', message: `Přihlášení selhalo.`};
       console.error(err.message);
       res.redirect('back');
    }
@@ -69,6 +69,7 @@ router.post('/login', async (req, res) => {
 
 router.get('/logout', (req, res) => {
    res.clearCookie('jwt');
+   req.session.flash = {type: 'success', message: `Odhlášení proběhlo úspěšně.`};
    res.redirect('/');
 });
 
@@ -93,15 +94,18 @@ router.put('/profile', authMiddleware, async (req, res, next) => {
          res.clearCookie('jwt');
       } else {
          console.log('New passwords does not correspond to password confirmation. Update failed.')
+         req.session.flash = {type: 'danger', message: `Zadaná hesla se neshodují.`};
          return res.redirect('back');
       }
    }
 
    try {
       await user.save();
+      req.session.flash = {type: 'success', message: `Úprava profilu proběhla úspěšně.`};
       console.log(`Successfully updated user info: ${user._id}`);
    } catch (err) {
       console.error(err.message);
+      req.session.flash = {type: 'danger', message: `Úprava profilu se nezdařila.`};
       return res.redirect('back');
    }
 

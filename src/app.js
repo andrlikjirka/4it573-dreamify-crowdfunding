@@ -13,8 +13,18 @@ import authMiddleware from "./middlewares/auth.middleware.js";
 import adminMiddleware from "./middlewares/admin.middleware.js";
 import dreamsAdminRoutes from "./routes/admin/dreams.admin.routes.js";
 import usersAdminRoutes from "./routes/admin/users.admin.routes.js";
+import session from "express-session";
+import loadFlashMessage from "./middlewares/loadFlashMessage.js";
 
 const app = express();
+
+// Configure session and flash middleware
+app.use(session({
+    secret: process.env.SESSION_SECRET_KEY,
+    resave: false,
+    saveUninitialized: true
+}));
+app.use(cookieParser());
 
 // utils
 app.locals.categories = categories;
@@ -27,7 +37,6 @@ let env = nunjucks.configure('src/views', {
 env.addFilter('date', dateFilter);
 
 app.use(express.urlencoded({extended: true}));
-app.use(cookieParser());
 app.use(express.static('public'));
 app.use(method_override('_method'));
 
@@ -35,6 +44,7 @@ await connectDB();
 mongoose.set('debug', true);
 
 app.use(loadUserMiddleware);
+app.use(loadFlashMessage);
 
 // public module
 app.get('/', async (req,res) => {

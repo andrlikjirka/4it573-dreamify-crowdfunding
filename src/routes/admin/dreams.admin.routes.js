@@ -38,8 +38,10 @@ router.put('/dreams/:id', async (req, res, next) => {
     try {
         await dream.save();
         console.log(`ADMIIN: Successfully updated dream: ${dream._id}`);
+        req.session.flash = {type: 'success', message: `Úprava snu proběhla úspěšně.`};
     } catch (err) {
         console.error(err.message);
+        req.session.flash = {type: 'danger', message: `Úprava snu se nezdařila.`};
         return res.redirect('back');
     }
     res.redirect('back');
@@ -54,8 +56,10 @@ router.delete('/dreams/:id', async (req, res, next) => {
     try {
         await dream.save();
         console.log(`ADMIN: Successfully marked as deleted dream: ${dream._id}`);
+        req.session.flash = {type: 'success', message: `Odebrání snu proběhlo úspěšně.`};
     } catch (err) {
         console.error(err.message);
+        req.session.flash = {type: 'danger', message: `Odebrání snu se nezdařilo.`};
         return res.redirect('back');
     }
     res.redirect('back');
