@@ -51,9 +51,33 @@ export const getShowedDreamById = async (id) => {
 
 export const findAllContributionsByDreamId = async (id) => {
     const contributions = await Contribution.find(
-        {"dream.dream_id": id},
+        {"dream.dream_id": id, "payment.payment_status": 'COMPLETED'},
         {},
         {}
     ).sort({contributedAt: -1});
     return contributions;
 };
+
+export const saveNewContribution = async (contributionData) => {
+    const contribution = new Contribution(contributionData);
+    try {
+        await contribution.save();
+    } catch (err) {
+        console.error(err.message);
+    }
+    return contribution;
+}
+
+export const saveContributionToDream = async (newContribution, dream, paymentToken) => {
+    const contribution = new Contribution(newContribution);
+
+
+}
+
+export const getContributionById = async (id) => {
+    const contribution = await Contribution.findOne(
+        {_id: id},
+        {},
+        {});
+    return contribution;
+}

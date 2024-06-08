@@ -34,13 +34,17 @@ const contributionSchema = mongoose.Schema({
             required: true
         }
     },
-    /*
-    state: {
-        type: String,
-        default: 'waiting',
-        enum: ['waiting', 'paid', 'cancelled']
-    },
-    */
+    payment: {
+        payment_id: {
+            type: String,
+            //required: true
+        },
+        payment_status: {
+            type: String,
+            //required: true,
+            enum: ['PENDING', 'COMPLETED', 'DECLINED']
+        }
+    }
 });
 
 export  const Contribution = mongoose.model('Contribution', contributionSchema);

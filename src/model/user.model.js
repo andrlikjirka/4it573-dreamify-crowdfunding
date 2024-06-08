@@ -31,6 +31,10 @@ const userSchema = new mongoose.Schema({
         enum: Array.from(userRoles.keys()),
         required: true
     },
+    paypal_address: {
+        type: String,
+        unique: true
+    },
     blocked: {
         type: Boolean,
         default: false

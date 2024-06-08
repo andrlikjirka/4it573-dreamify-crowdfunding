@@ -15,7 +15,6 @@ import dreamsAdminRoutes from "./routes/admin/dreams.admin.routes.js";
 import usersAdminRoutes from "./routes/admin/users.admin.routes.js";
 import session from "express-session";
 import loadFlashMessage from "./middlewares/loadFlashMessage.js";
-import paypal_testRoutes from "./routes/paypal_test.routes.js";
 import adminRoutes from "./routes/admin.routes.js";
 import publicRoutes from "./routes/public.routes.js";
 
@@ -56,8 +55,6 @@ app.use(publicRoutes);
 app.use('/admin', authMiddleware, adminMiddleware);
 app.use('/admin', adminRoutes);
 // end: admin module
-
-app.use(paypal_testRoutes)
 
 app.use((req, res, next) => {
     res.status(404);

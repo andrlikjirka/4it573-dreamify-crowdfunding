@@ -23,6 +23,7 @@ router.post('/register', async (req, res) => {
       const user = new User({
          name: req.body.name,
          email: req.body.email,
+         paypal_address: req.body.paypal_address,
          hash: hash
       });
       await user.save();
@@ -87,6 +88,7 @@ router.put('/profile', authMiddleware, async (req, res, next) => {
 
    if (req.body.name) user.name = req.body.name;
    if (req.body.email) user.email = req.body.email;
+   if (req.body.paypal_address) user.paypal_address = req.body.paypal_address;
    if (req.body.password && req.body.password_confirm) {
       if (req.body.password === req.body.password_confirm){
          console.log(req.body.password)

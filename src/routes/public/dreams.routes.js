@@ -4,10 +4,13 @@ import {Dream} from "../../model/dream.model.js";
 import fileUploadMiddleware from "../../middlewares/fileUpload.middleware.js";
 import * as fs from "fs";
 import {
-    findAllContributionsByDreamId, findDreamsByAuthorId,
+    findAllContributionsByDreamId,
+    findDreamsByAuthorId,
     findShowedAcceptedDreams,
     findShowedAcceptedDreamsByCategory,
-    getDreamById, getShowedDreamById, saveNewContributionToDream
+    getContributionById,
+    getDreamById,
+    getShowedDreamById, saveNewContribution,
 } from "../../services/dreams.service.js";
 import {startSession} from "mongoose";
 import loggedUserIsDreamAuthorMiddleware from "../../middlewares/loggedUserIsDreamAuthor.middleware.js";
@@ -15,6 +18,8 @@ import {sendDreamCardToAllConnections, sendDreamDetailToAllConnections} from "..
 import sanitizeHtml from "sanitize-html";
 import {tinyMceOptions} from "../../utils.js";
 import dreamApprovedNotDueMiddleware from "../../middlewares/dreamApprovedNotDue.middleware.js";
+import * as paypal from "../../services/paypal.service.js";
+import {getUserById} from "../../services/users.service.js";
 
 const router = express.Router();
 
@@ -25,7 +30,7 @@ router.get('/dreams', async (req, res) => {
     } else {
         dreams = await findShowedAcceptedDreams();
     }
-
+    dreams = dreams.filter(dream => dream.dateDiff > 0)
     res.render('public/dreams/dreams.index.html', {
         dreams: dreams
     });
@@ -84,8 +89,9 @@ router.get('/dreams/:id/contribute', authMiddleware, async (req, res, next) => {
 router.post('/dreams/:id/contribute', authMiddleware, dreamApprovedNotDueMiddleware, async (req, res, next) => {
     const dream = await getShowedDreamById(req.params.id);
     if (!dream) return next();
+    const author = await getUserById(dream.author.author_id);
 
-    const contribution = {
+    const contributionData = {
         amount: Number(req.body.contribution),
         contributor: {
             contributor_id: res.locals.userIdentity.id,
@@ -96,15 +102,46 @@ router.post('/dreams/:id/contribute', authMiddleware, dreamApprovedNotDueMiddlew
             dream_name: dream.name
         }
     };
-    dream.pledged += Number(req.body.contribution);
-    dream.contributors += 1;
 
     try {
-        await saveNewContributionToDream(contribution, dream);
-        req.session.flash = {type: 'success', message: `Děkujeme za Váš příspěvek na realizaci daného snu.`};
+        const contribution = await saveNewContribution(contributionData);
+        const order = await paypal.createOrder(dream._id, dream.name, contribution._id, author.paypal_address, req.body.contribution);
+        contribution.payment = {
+            payment_id: order.id,
+            payment_status: 'PENDING'
+        };
+        await contribution.save();
+        const url = order.links.find(link => link.rel === 'payer-action').href;
+        res.redirect(url);
     } catch (err) {
-        req.session.flash = {type: 'danger', message: `Přispěvek na zvolený se se nepodařilo zpracovat.`};
-        return res.redirect('back');
+        console.error(err.message);
+        return res.redirect('/');
+    }
+});
+
+router.get('/dreams/:dream_id/contributions/:contribution_id/complete', async (req, res) => {
+    const contribution = await getContributionById(req.params.contribution_id);
+    contribution.payment.payment_status = 'COMPLETED';
+    const dream = await getDreamById(contribution.dream.dream_id)
+    dream.pledged += contribution.amount;
+    dream.contributors += 1;
+
+    const session = await startSession();
+    try {
+        session.startTransaction();
+        await contribution.save();
+        await dream.save();
+        await paypal.capturePayment(req.query.token);
+        await session.commitTransaction();
+        await session.endSession();
+        console.log(`Successfully added new contribution to the dream: ${dream.id}`);
+        req.session.flash = {type: 'success', message: `Děkujeme za Váš příspěvek na realizaci daného snu.`};
+    } catch (error) {
+        await session.abortTransaction()
+        await session.endSession()
+        console.error(error.message);
+        req.session.flash = {type: 'danger', message: `Přispěvek na vybraný sen se nepodařilo zpracovat.`};
+        return res.redirect('/dreams' + req.params.dream_id);
     }
     sendDreamCardToAllConnections(dream._id)
         .catch((e) => {
@@ -114,8 +151,21 @@ router.post('/dreams/:id/contribute', authMiddleware, dreamApprovedNotDueMiddlew
         .catch((e) => {
             console.error(e)
         });
-    res.redirect('/dreams/' + req.params.id)
-});
+    res.redirect('/dreams/' + req.params.dream_id)
+})
+
+router.get('/dreams/:dream_id/contributions/:contribution_id/cancel', async (req, res) => {
+    const contribution = await getContributionById(req.params.contribution_id);
+    contribution.payment.payment_status = 'DECLINED';
+    try {
+        await contribution.save();
+    } catch (error) {
+    }
+    req.session.flash = { type: 'danger', message: 'Přispěvek na vybraný sen se nepodařilo zpracovat.'};
+    res.redirect('/dreams/' + req.params.dream_id);
+})
+
+// ----------------------
 
 
 router.get('/new-dream', authMiddleware, (req, res) => {
