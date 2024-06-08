@@ -15,10 +15,12 @@ import dreamsAdminRoutes from "./routes/admin/dreams.admin.routes.js";
 import usersAdminRoutes from "./routes/admin/users.admin.routes.js";
 import session from "express-session";
 import loadFlashMessage from "./middlewares/loadFlashMessage.js";
+import paypal_testRoutes from "./routes/paypal_test.routes.js";
+import adminRoutes from "./routes/admin.routes.js";
+import publicRoutes from "./routes/public.routes.js";
 
 const app = express();
 
-// Configure session and flash middleware
 app.use(session({
     secret: process.env.SESSION_SECRET_KEY,
     resave: false,
@@ -47,24 +49,15 @@ app.use(loadUserMiddleware);
 app.use(loadFlashMessage);
 
 // public module
-app.get('/', async (req,res) => {
-    res.render('public/index.html', {});
-});
-app.get('/about', (req, res) => {
-    res.render('public/about.html', {});
-});
-app.use(dreamsRoutes);
-app.use(usersRoutes);
+app.use(publicRoutes);
 // end: public module
 
 // admin module
 app.use('/admin', authMiddleware, adminMiddleware);
-app.get('/admin', async (req,res) => {
-    res.render('admin/index.html', {});
-});
-app.use('/admin', dreamsAdminRoutes);
-app.use('/admin', usersAdminRoutes);
+app.use('/admin', adminRoutes);
 // end: admin module
+
+app.use(paypal_testRoutes)
 
 app.use((req, res, next) => {
     res.status(404);

@@ -7,9 +7,8 @@ import {
     findAllContributionsByDreamId, findDreamsByAuthorId,
     findShowedAcceptedDreams,
     findShowedAcceptedDreamsByCategory,
-    getDreamById, getShowedDreamById
+    getDreamById, getShowedDreamById, saveNewContributionToDream
 } from "../../services/dreams.service.js";
-import {Contribution} from "../../model/contribution.model.js";
 import {startSession} from "mongoose";
 import loggedUserIsDreamAuthorMiddleware from "../../middlewares/loggedUserIsDreamAuthor.middleware.js";
 import {sendDreamCardToAllConnections, sendDreamDetailToAllConnections} from "../../websockets.js";
@@ -86,7 +85,7 @@ router.post('/dreams/:id/contribute', authMiddleware, dreamApprovedNotDueMiddlew
     const dream = await getShowedDreamById(req.params.id);
     if (!dream) return next();
 
-    const contribution = new Contribution({
+    const contribution = {
         amount: Number(req.body.contribution),
         contributor: {
             contributor_id: res.locals.userIdentity.id,
@@ -96,23 +95,14 @@ router.post('/dreams/:id/contribute', authMiddleware, dreamApprovedNotDueMiddlew
             dream_id: dream.id,
             dream_name: dream.name
         }
-    });
+    };
     dream.pledged += Number(req.body.contribution);
     dream.contributors += 1;
 
-    const session = await startSession();
     try {
-        session.startTransaction();
-        await contribution.save();
-        await dream.save();
-        await session.commitTransaction();
-        await session.endSession();
-        console.log(`Successfully added new contribution to the dream: ${dream.id}`);
+        await saveNewContributionToDream(contribution, dream);
         req.session.flash = {type: 'success', message: `Děkujeme za Váš příspěvek na realizaci daného snu.`};
     } catch (err) {
-        await session.abortTransaction()
-        await session.endSession()
-        console.error(err.message);
         req.session.flash = {type: 'danger', message: `Přispěvek na zvolený se se nepodařilo zpracovat.`};
         return res.redirect('back');
     }
@@ -126,6 +116,7 @@ router.post('/dreams/:id/contribute', authMiddleware, dreamApprovedNotDueMiddlew
         });
     res.redirect('/dreams/' + req.params.id)
 });
+
 
 router.get('/new-dream', authMiddleware, (req, res) => {
     res.render('public/dreams/new-dream.html', {});

@@ -57,7 +57,7 @@ router.post('/login', async (req, res) => {
       }
       const token = jwt.sign({userId: user._id, role: user.role}, process.env.JWT_SECRET_KEY, {expiresIn: '1h'});
       res.cookie('jwt', token);
-      req.session.flash = {type: 'success', message: `Přihlášení proběhlo úspěšně.`};
+      //req.session.flash = {type: 'success', message: `Přihlášení proběhlo úspěšně.`};
       res.redirect('/');
 
    } catch (err) {
