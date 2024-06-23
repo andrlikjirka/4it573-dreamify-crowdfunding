@@ -18,19 +18,21 @@
         </ul>
     </div>
 
-    {% if dreams.length > 0 %}
-    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 mb-5">
-        {% for dream in dreams %}
-        <div class="col">
-            {% include "public/dreams/_dream.card.html" %}
+    <div id="dreams">
+        {% if dreams.length > 0 %}
+        <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 mb-5">
+            {% for dream in dreams %}
+            <div class="col">
+                {% include "public/dreams/_dream.card.html" %}
+            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
+        {% else %}
+        <div class="alert alert-primary fade show py-2 mb-5" role="alert">
+            <span class="small">K dispozici nejsou žádné sny</span>
+        </div>
+        {% endif %}
     </div>
-    {% else %}
-    <div class="alert alert-primary fade show py-2 mb-5" role="alert">
-        <span class="small">K dispozici nejsou žádné sny</span>
-    </div>
-    {% endif %}
 
 </div>
 

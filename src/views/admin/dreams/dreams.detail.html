@@ -21,7 +21,7 @@
             <div class="d-flex flex-row align-items-center">
                 <div class="me-4">
                     <span> Stav: </span>
-                    <span class="badge rounded-pill
+                    <span id="status" class="badge rounded-pill
                         {% if dream.status == 'waiting'%} bg-warning text-dark
                         {% elif dream.status == 'approved' %} bg-success
                         {% elif dream.status == 'cancelled' %} bg-danger
