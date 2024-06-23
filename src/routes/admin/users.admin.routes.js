@@ -1,8 +1,6 @@
 import express from "express";
 import {findAllUsers, getUserById} from "../../services/users.service.js";
-import {getDreamById} from "../../services/dreams.service.js";
-import {User} from "../../model/user.model.js";
-import bcrypt from "bcrypt";
+import bcryptjs from "bcryptjs";
 
 const router = express.Router();
 
@@ -22,7 +20,7 @@ router.put('/users/:id', async (req, res, next) => {
     if (req.body.email) user.email = req.body.email;
     if (req.body.password && req.body.password_confirm) {
         if (req.body.password === req.body.password_confirm){
-            user.hash = await bcrypt.hash(req.body.password, 10);
+            user.hash = await bcryptjs.hash(req.body.password, 10);
             res.clearCookie('jwt');
         } else {
             console.log('New passwords does not correspond to password confirmation. Update failed.')

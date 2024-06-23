@@ -1,9 +1,9 @@
 import express from "express";
 import {User} from "../../model/user.model.js";
-import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import authMiddleware from "../../middlewares/auth.middleware.js";
 import {getUserByEmail, getUserById} from "../../services/users.service.js";
+import bcryptjs from 'bcryptjs'
 
 const router = express.Router();
 
@@ -19,7 +19,7 @@ router.post('/register', async (req, res) => {
       return res.redirect('back');
    }
    try {
-      const hash = await bcrypt.hash(password, 10);
+      const hash = await bcryptjs.hash(password, 10);
       const user = new User({
          name: req.body.name,
          email: req.body.email,
@@ -51,7 +51,7 @@ router.post('/login', async (req, res) => {
          req.session.flash = {type: 'danger', message: `Zadané přihlašovací údaje jsou neplatné.`};
          return res.redirect('back');
       }
-      const hashMatch = await bcrypt.compare(req.body.password, user.hash);
+      const hashMatch = await bcryptjs.compare(req.body.password, user.hash);
       if (!hashMatch) {
          req.session.flash = {type: 'danger', message: `Zadané přihlašovací údaje jsou neplatné.`};
          return res.redirect('back');
@@ -92,7 +92,7 @@ router.put('/profile', authMiddleware, async (req, res, next) => {
    if (req.body.password && req.body.password_confirm) {
       if (req.body.password === req.body.password_confirm){
          console.log(req.body.password)
-         user.hash = await bcrypt.hash(req.body.password, 10);
+         user.hash = await bcryptjs.hash(req.body.password, 10);
          res.clearCookie('jwt');
       } else {
          console.log('New passwords does not correspond to password confirmation. Update failed.')

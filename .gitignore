@@ -1,7 +1,7 @@
 .idea
 
-.docker/app.env
-.docker/db.env
+app.env
+db.env
 
 # Logs
 logs

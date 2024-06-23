@@ -14,13 +14,13 @@ test.beforeAll(async () => {
   conn = await mongoose.connect('mongodb://127.0.0.1:27017', {
     user: 'and',
     pass: 'and',
-    dbName: 'db-test'
+    dbName: 'dreamify-db-test'
   });
   const user = new User({
-    name: 'Admin Testovič',
+    name: 'Admin Adminovič',
     email: 'admin@email.cz',
     role: 'admin',
-    paypal_address: 'jirka@paypal.com',
+    paypal_address: 'jirka@personal.example.com',
     hash: await bcrypt.hash('admin', 10)
   });
   await user.save();
