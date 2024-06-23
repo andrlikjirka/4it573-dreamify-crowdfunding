@@ -2,17 +2,12 @@ import express from 'express';
 import nunjucks from "nunjucks";
 import cookieParser from "cookie-parser";
 import {connectDB} from "./db/db.js";
-import dreamsRoutes from "./routes/public/dreams.routes.js";
 import method_override from 'method-override';
 import loadUserMiddleware from "./middlewares/loadUser.middleware.js";
-import usersRoutes from "./routes/public/users.routes.js";
 import dateFilter from "nunjucks-date-filter";
-import mongoose from "mongoose";
 import {categories, dreamStatus} from "./utils.js";
 import authMiddleware from "./middlewares/auth.middleware.js";
 import adminMiddleware from "./middlewares/admin.middleware.js";
-import dreamsAdminRoutes from "./routes/admin/dreams.admin.routes.js";
-import usersAdminRoutes from "./routes/admin/users.admin.routes.js";
 import session from "express-session";
 import loadFlashMessage from "./middlewares/loadFlashMessage.js";
 import adminRoutes from "./routes/admin.routes.js";
@@ -42,7 +37,7 @@ app.use(express.static('public'));
 app.use(method_override('_method'));
 
 await connectDB();
-mongoose.set('debug', true);
+//mongoose.set('debug', true);
 
 app.use(loadUserMiddleware);
 app.use(loadFlashMessage);

@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon -e js,html --env-file=app.env index.js",
-    "test-app": "NODE_ENV=test node --env-file=.env index.js",
+    "test-app": "NODE_ENV=test node --env-file=app.env index.js",
     "test": "npx playwright test --project=chromium --ui",
     "prod": "NODE_ENV=production node index.js"
   },

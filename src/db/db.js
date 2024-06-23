@@ -3,7 +3,6 @@ import mongoose from "mongoose";
 const MONGODB_URL = `mongodb://mongo:27017`;
 
 export const connectDB = async () => {
-    console.log(process.env.DB_NAME);
     try {
         await mongoose.connect(MONGODB_URL, {
             user: process.env.DB_USER,

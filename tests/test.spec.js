@@ -3,15 +3,15 @@ import mongoose from "mongoose";
 import path from 'path';
 import { fileURLToPath } from 'url';
 import {User} from "../src/model/user.model.js";
-import bcrypt from "bcrypt";
+import bcryptjs from "bcryptjs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 let conn = null;
-const APP_URL = 'http://localhost:3001';
+const APP_TEST_URL = 'http://localhost:3001';
 
 test.beforeAll(async () => {
-  conn = await mongoose.connect('mongodb://127.0.0.1:27017', {
+  conn = await mongoose.connect('mongodb://localhost:27017', {
     user: 'and',
     pass: 'and',
     dbName: 'dreamify-db-test'
@@ -21,13 +21,13 @@ test.beforeAll(async () => {
     email: 'admin@email.cz',
     role: 'admin',
     paypal_address: 'jirka@personal.example.com',
-    hash: await bcrypt.hash('admin', 10)
+    hash: await bcryptjs.hash('admin', 10)
   });
   await user.save();
 });
 
 test.beforeEach(async ({page}) => {
-  await page.goto(APP_URL);
+  await page.goto(APP_TEST_URL);
 });
 
 test('homepage has title', async ({ page }) => {
@@ -52,17 +52,17 @@ test('login and logout', async ({page}) => {
   await page.getByLabel('E-mail').fill('test@email.cz')
   await page.getByLabel('Heslo').fill('test')
   await page.getByRole('button', {name: 'Přihlásit se'}).click()
-  await expect(page).toHaveURL(APP_URL);
+  await expect(page).toHaveURL(APP_TEST_URL);
   // logout
   await page.locator('button.dropdown-toggle', { name: 'Test Testovič' }).click();
   await page.getByRole('link', {name: 'Odhlásit'}).click();
-  await expect(page).toHaveURL(APP_URL);
+  await expect(page).toHaveURL(APP_TEST_URL);
   await expect(page.locator('.alert-success')).toHaveText('Odhlášení proběhlo úspěšně.')
 });
 
 test.describe('new dream', () => {
   test.beforeEach('login as user', async ({page}) => {
-    await page.goto(APP_URL);
+    await page.goto(APP_TEST_URL);
     await page.getByRole('link', {name: 'Přihlásit'}).click();
     await page.getByLabel('E-mail').fill('test@email.cz')
     await page.getByLabel('Heslo').fill('test')
@@ -87,7 +87,7 @@ test.describe('new dream', () => {
 
 test.describe('new dream approval process', () => {
   test.beforeEach('login as admin', async ({page}) => {
-    await page.goto(APP_URL);
+    await page.goto(APP_TEST_URL);
     await page.getByRole('link', {name: 'Přihlásit'}).click();
     await page.getByLabel('E-mail').fill('admin@email.cz')
     await page.getByLabel('Heslo').fill('admin')
@@ -97,7 +97,7 @@ test.describe('new dream approval process', () => {
   test.beforeEach('admin dashboard', async ({page}) => {
     await page.locator('button.dropdown-toggle', { name: 'Admin Testovič' }).click();
     await page.getByRole('link', {name: 'Administrace aplikace'}).click();
-    await expect(page).toHaveURL(APP_URL + '/admin');
+    await expect(page).toHaveURL(APP_TEST_URL + '/admin');
     await expect(page.getByRole('heading', {name: 'Administrace aplikace'})).toBeVisible();
   });
 
@@ -133,7 +133,7 @@ test.describe('new dream approval process', () => {
 
 test.describe('dreams', () => {
   test.beforeEach('login as user', async ({page}) => {
-    await page.goto(APP_URL);
+    await page.goto(APP_TEST_URL);
     await page.getByRole('link', {name: 'Přihlásit'}).click();
     await page.getByLabel('E-mail').fill('test@email.cz')
     await page.getByLabel('Heslo').fill('test')
@@ -177,7 +177,7 @@ test.describe('dreams', () => {
 
 test.describe('my dreams', () => {
   test.beforeEach('login as user', async ({page}) => {
-    await page.goto(APP_URL);
+    await page.goto(APP_TEST_URL);
     await page.getByRole('link', {name: 'Přihlásit'}).click();
     await page.getByLabel('E-mail').fill('test@email.cz')
     await page.getByLabel('Heslo').fill('test')
@@ -213,7 +213,7 @@ test.describe('my dreams', () => {
 
 test.describe('my profile', () => {
   test.beforeEach(async ({page}) => {
-    await page.goto(APP_URL);
+    await page.goto(APP_TEST_URL);
     await page.getByRole('link', {name: 'Přihlásit'}).click();
     await page.getByLabel('E-mail').fill('test@email.cz')
     await page.getByLabel('Heslo').fill('test')

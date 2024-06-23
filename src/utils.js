@@ -34,3 +34,5 @@ export const tinyMceOptions = {
         '*': ['style'],
     },
 }
+
+export const PORT = process.env.NODE_ENV === 'test' ? process.env.TEST_APP_PORT : process.env.APP_PORT

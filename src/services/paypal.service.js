@@ -1,3 +1,5 @@
+import {PORT} from "../utils.js";
+
 const getAccessToken = async () => {
     const response = await fetch(`${process.env.PAYPAL_BASE_URL}/v1/oauth2/token`, {
         method: 'POST',
@@ -57,8 +59,8 @@ export const createOrder = async (dreamId, dreamName, contributionId, dreamAutho
                         "locale": "cs-CZ",
                         "landing_page": "LOGIN",
                         "user_action": "PAY_NOW",
-                        "return_url": `${process.env.BASE_URL}/dreams/${dreamId}/contributions/${contributionId}/complete`,
-                        "cancel_url": `${process.env.BASE_URL}/dreams/${dreamId}/contributions/${contributionId}/cancel`
+                        "return_url": `${process.env.BASE_URL}:${PORT}/dreams/${dreamId}/contributions/${contributionId}/complete`,
+                        "cancel_url": `${process.env.BASE_URL}:${PORT}/dreams/${dreamId}/contributions/${contributionId}/cancel`
                     }
                 }
             }
