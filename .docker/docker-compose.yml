@@ -2,7 +2,6 @@ version: '3.8'
 name: '4it573-dreamify'
 
 services:
-
   app:
     build: .
     volumes:
