@@ -11,13 +11,14 @@ To run app instance (on port 3000)
 3. run `npm install`
 4. edit `app.env` and `db.env` files
 5. run: `docker compose up`
-6. go to: `http://localhost:3000/`
+6. optionally run `node db-seed.js`
+7. go to: `http://localhost:3000/`
 
 
 To run end-to-end tests (using independent test-app instance on port 3001):
 
-7. make sure you have node.js installed on your machine
-8. run tests on your local machine in new terminal window: `npm run test`
+8. make sure you have node.js installed on your machine
+9. run tests on your local machine in new terminal window: `npm run test`
 
 ### Tech-stack
 
