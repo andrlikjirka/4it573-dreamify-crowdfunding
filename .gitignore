@@ -134,3 +134,4 @@ dist
 /playwright/.cache/
 /db-seed.js
 
+node_modules
