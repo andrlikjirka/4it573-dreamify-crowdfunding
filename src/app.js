@@ -5,7 +5,7 @@ import {connectDB} from "./db/db.js";
 import method_override from 'method-override';
 import loadUserMiddleware from "./middlewares/loadUser.middleware.js";
 import dateFilter from "nunjucks-date-filter";
-import {categories, dreamStatus} from "./utils.js";
+import {categories, dreamStatus, PORT} from "./utils.js";
 import authMiddleware from "./middlewares/auth.middleware.js";
 import adminMiddleware from "./middlewares/admin.middleware.js";
 import session from "express-session";

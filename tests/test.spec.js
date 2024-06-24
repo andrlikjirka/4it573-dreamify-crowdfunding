@@ -12,9 +12,9 @@ const APP_TEST_URL = 'http://localhost:3001';
 
 test.beforeAll(async () => {
   conn = await mongoose.connect('mongodb://localhost:27017', {
-    user: 'and',
-    pass: 'and',
-    dbName: 'dreamify-db-test'
+    user: process.env.DB_USER,
+    pass: process.env.DB_PASSWORD,
+    dbName: process.env.TEST_DB_NAME
   });
   const user = new User({
     name: 'Admin Adminovič',
