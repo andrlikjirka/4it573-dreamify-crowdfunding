@@ -10,7 +10,7 @@ To run app instance (on port 3000)
 2. run `cd <project>`
 3. run `npm install`
 4. edit `app.env` and `db.env` files
-5. run: `docker compose up`
+5. run: `docker compose up --detach`
 6. optionally run `node db-seed.js`
 7. go to: `http://localhost:3000/`
 
