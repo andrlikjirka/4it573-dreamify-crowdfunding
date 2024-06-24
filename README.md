@@ -34,14 +34,15 @@
 ## How to run the project
 
 To run app instance (on port 3000)
-1. `git clone ...`
-2. edit `app.env` and `db.env` files
+1. run `git clone <repository>`
+2. run `cd <project>`
 3. run `npm install`
-4. run: `docker compose up`
-5. go to: `http://localhost:3000/`
+4. edit `app.env` and `db.env` files
+5. run: `docker compose up`
+6. go to: `http://localhost:3000/`
 
 
 To run end-to-end tests (using independent test-app instance on port 3001):
 
-6. make sure you have node.js installed on your machine
-7. run tests on your local machine in new terminal window: `npm run test`
+7. make sure you have node.js installed on your machine
+8. run tests on your local machine in new terminal window: `npm run test`
