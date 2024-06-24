@@ -43,6 +43,4 @@ To run app instance (on port 3000)
 To run end-to-end tests (using independent test-app instance on port 3001):
 
 1. make sure you have node.js installed on your machine
-2. run: `npm install`
-3. run on your local machine in new terminal window: `npm run test`
-4. run tests in UI mode
+2. run tests on your local machine in new terminal window: `npm run test`
