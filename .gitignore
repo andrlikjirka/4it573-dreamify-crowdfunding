@@ -1,8 +1,5 @@
 .idea
 
-app.env
-db.env
-
 # Logs
 logs
 *.log
@@ -74,6 +71,8 @@ web_modules/
 .yarn-integrity
 
 # dotenv environment variable files
+app.env
+db.env
 .env
 .env.development.local
 .env.test.local
@@ -133,3 +132,4 @@ dist
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+/db-seed.js
