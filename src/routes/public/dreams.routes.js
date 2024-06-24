@@ -16,7 +16,7 @@ import {startSession} from "mongoose";
 import loggedUserIsDreamAuthorMiddleware from "../../middlewares/loggedUserIsDreamAuthor.middleware.js";
 import {sendDreamCardToAllConnections, sendDreamDetailToAllConnections} from "../../websockets.js";
 import sanitizeHtml from "sanitize-html";
-import {tinyMceOptions} from "../../utils.js";
+import {PORT, tinyMceOptions} from "../../utils.js";
 import dreamApprovedNotDueMiddleware from "../../middlewares/dreamApprovedNotDue.middleware.js";
 import * as paypal from "../../services/paypal.service.js";
 import {getUserById} from "../../services/users.service.js";
@@ -32,11 +32,11 @@ router.get('/dreams', async (req, res) => {
     }
     dreams = dreams.filter(dream => dream.dateDiff > 0)
     res.render('public/dreams/dreams.index.html', {
+        ws_port: PORT,
         dreams: dreams
     });
 });
 
-//TODO: middleware pro validaci dat pro vytvoření snu
 router.post('/dreams', authMiddleware, fileUploadMiddleware.single('file'), async (req, res) => {
 
     const dream = new Dream({
@@ -72,6 +72,7 @@ router.get('/dreams/:id', async (req, res, next) => {
     const contributions = await findAllContributionsByDreamId(req.params.id);
 
     res.render('public/dreams/dreams.detail.html', {
+        ws_port: PORT,
         dream: dream,
         contributions: contributions
     });
