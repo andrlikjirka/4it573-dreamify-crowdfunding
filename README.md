@@ -1,7 +1,10 @@
-# Dreamify - crowdfunding app
+# Dreamify
+
+> Seminar work for the 4IT573 course
 
 ## Project description
-...
+
+- Dreamify is a web crowdfunding platform designed for funding to make people's dreams come true. 
 
 ## How to run the project
 
@@ -27,8 +30,8 @@ To run end-to-end tests (using independent test-app instance on port 3001):
 - MongoDB
 - Websockets
 - JSON WebTokens
-- Playwright
 - PayPal API
+- Playwright
 - Docker
  
 ### Functionality
@@ -38,7 +41,7 @@ To run end-to-end tests (using independent test-app instance on port 3001):
 - dreams categories
 - publishing new dreams
 - contribution to dream authors using PayPal (helping to make their dreams come true)
-- real-time updates when a new contribution made
+- real-time updates of pledged money when a new contribution made
 - user profile
 - author's dreams 
 
